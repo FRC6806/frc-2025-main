@@ -85,7 +85,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-      //  joystick.a().whileTrue(alignment);
+
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
 
@@ -169,6 +169,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("level", Values.getLevel());
         SmartDashboard.putString("direction", Values.getLeftOrRight());
         SmartDashboard.putNumber("yaw", s_Vision.getYaw());
+
     }
 
 
