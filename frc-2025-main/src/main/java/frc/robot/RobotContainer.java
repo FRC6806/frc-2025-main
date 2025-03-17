@@ -40,7 +40,7 @@ import frc.robot.subsystems.CoralIntake;
 
 public class RobotContainer {
     private final CANBus canbus = new CANBus("elavator");
-    private final TalonFX m3 = new TalonFX(0,canbus);
+    //private final TalonFX m3 = new TalonFX(0,canbus);
 
     private final VisionSystem s_Vision = new VisionSystem("photonvision");
     public final PoleAlignment align = new PoleAlignment (s_Vision); 
