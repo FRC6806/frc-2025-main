@@ -33,6 +33,8 @@ public class Constants {
         public static final double CAMERA_X_OFFSET = 0.1; // Meters from robot center
         public static final double CAMERA_Y_OFFSET = 0.0; // Meters from robot center
         public static final double CAMERA_ANGLE_OFFSET = 0.0; //Radians
+        public static final double coralPitch = 60;
+        public static final double coralYaw = 60;
     }
     public class Transforms {
     public static Transform3d robotToCamera =
@@ -40,4 +42,5 @@ public class Constants {
             new Translation3d(0, 0, 0.5), // Centered on the robot, 0.5m up
             new Rotation3d(0, Math.toRadians(-15), 0)); // Pitched 15 deg up
   }
+  
 }
