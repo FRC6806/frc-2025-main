@@ -39,21 +39,21 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.CoralIntake;
 
 public class RobotContainer {
-    private final CANBus canbus = new CANBus("elavator");
+    //private final CANBus canbus = new CANBus("elavator");
     //private final TalonFX m3 = new TalonFX(0,canbus);
 
     private final VisionSystem s_Vision = new VisionSystem("photonvision");
     public final PoleAlignment align = new PoleAlignment (s_Vision); 
-    private Elevator elevator= new Elevator(54,51);
-
+    private Elevator elevator = new Elevator(54,51);
+    
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a max rad/s
+    private double MaxAngularRate = RotationsPerSecond.of(0.5).in(RadiansPerSecond); // 3/4 of a max rad/s
 
     private CoralIntake coralScore;
     private AlgaeIntake algaeScore;
 
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.15).withRotationalDeadband(MaxAngularRate * 0.15) // Add a 10% deadband
+            .withDeadband(MaxSpeed * 0.15).withRotationalDeadband(MaxAngularRate * 0.25) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -65,12 +65,14 @@ public class RobotContainer {
     private final XboxController operator = new XboxController(1);
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     private final SendableChooser<Command> autoChooser;
+    
 
     public RobotContainer() {
         // AUTOCOMMANDS
         // Subsystem initialization
-        coralScore = new CoralIntake(55,52,60, canbus); //80 is the algae motor but we dont know it is
+        coralScore = new CoralIntake(55,52,60);
         algaeScore = new AlgaeIntake(62, 61);
+        
 
         // Register Named Commands
         //NamedCommands.registerCommand("CoralScore", new InstantCommand(() -> coralScore.CoralIntakeSpeed(-1)));
@@ -120,7 +122,23 @@ public class RobotContainer {
         
     JoystickButton operatorA = new JoystickButton(operator, XboxController.Button.kA.value);
     JoystickButton operatorB = new JoystickButton(operator, XboxController.Button.kB.value);
-    //operatorA.whileTrue(new InstantCommand(()-> coralIntake.wristpose(110)));
+    JoystickButton operatorX = new JoystickButton(operator, XboxController.Button.kX.value);
+    JoystickButton operatorY = new JoystickButton(operator, XboxController.Button.kY.value);
+
+
+    operatorA.whileTrue(new InstantCommand(()-> coralScore.wristspeed(0.2)));
+    operatorA.whileFalse(new InstantCommand(()-> coralScore.wristspeed(0)));
+    // operatorB.whileTrue(new InstantCommand(()-> coralScore.wristspeed(-.2)));
+    // operatorB.whileFalse(new InstantCommand(()-> coralScore.wristspeed(0)));
+    operatorB.onTrue(new InstantCommand(()-> elevator.getPose()));
+    operatorX.onTrue(new InstantCommand(()-> elevator.setPose(-10)));
+    operatorY.onTrue(new InstantCommand(()-> elevator.setPose(0)));
+   // operatorX.onTrue(new InstantCommand(()-> coralScore.wristpose(CoralIntake.CORAL_SCORE))); 
+    //operatorY.onTrue(new InstantCommand(()-> coralScore.wristpose(CoralIntake.BACK_IN_ROBOT))); //low pos
+    //operatorY.onTrue(new InstantCommand(()-> coralScore.wristpose(CoralIntake.PLAYER_STATION))); 
+   //operatorY.onTrue(new InstantCommand(()-> coralScore.wristpose(CoralIntake.ALGAE_SHOOT))); 
+    //operatorY.onTrue(new InstantCommand(()-> coralScore.AlgaeIntakeSpeed(-1))); 
+    //operatorY.onFalse(new InstantCommand(()-> coralScore.AlgaeIntakeSpeed(0))); 
     //operatorA.whileTrue(new InstantCommand(()-> coralIntake.CoralIntakeSpeed(1)));
     //operatorA.onFalse(new InstantCommand(()-> coralIntake.CoralIntakeSpeed(0)));
     //operatorA.whileTrue(new InstantCommand(()-> elevator.rotateMotor(-15)));
@@ -129,14 +147,10 @@ public class RobotContainer {
     //operatorA.onFalse(new InstantCommand(()-> elevator.setElevatorspeed(0)));
     //operatorB.whileTrue(new InstantCommand(()-> elevator.setElevatorspeed(.25)));
 
-    operatorA.whileTrue(new InstantCommand(()-> coralScore.CoralIntakeSpeed(.2)));
-    operatorA.onFalse(new InstantCommand(()-> coralScore.CoralIntakeSpeed(0)));
-    operatorB.whileTrue(new InstantCommand(()-> coralScore.CoralIntakeSpeed(-.2)));
-
-    operatorA.whileTrue(new InstantCommand(() -> algaeScore.AlgaeIntakeSpeed(.2)));
-    operatorA.onFalse(new InstantCommand(()-> algaeScore.AlgaeIntakeSpeed(0)));
-    operatorB.whileTrue(new InstantCommand(() -> algaeScore.AlgaeIntakeSpeed(.2)));
-
+    //operatorA.whileTrue(new InstantCommand(()-> coralScore.CoralIntakeSpeed(.2)));
+    //operatorA.onFalse(new InstantCommand(()-> coralScore.CoralIntakeSpeed(0)));
+    //operatorB.whileTrue(new InstantCommand(()-> coralScore.CoralIntakeSpeed(-.2)));
+    //operatorB.onFalse(new InstantCommand(()-> coralScore.CoralIntakeSpeed(0)));
 
     //operatorB.whileTrue(new InstantCommand(()-> coralIntake.wristpose(214)));
     // operatorB.whileTrue(new InstantCommand(()-> coralIntake.CoralIntakeSpeed(-1)));
@@ -174,7 +188,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         /* Run the path selected from the auto chooser */
-        return null;
+        return (new PathPlannerAuto("New Auto"));
        //return new SequentialCommandGroup( new PathPlannerAuto("SimpleAuto") , motor2.withTimeout(.5 ));
     }
 }

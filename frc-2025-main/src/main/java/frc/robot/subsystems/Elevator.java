@@ -38,37 +38,47 @@ public class Elevator extends SubsystemBase {
 
         // Set slot 0 gains
         var slot0Configs = talonFXConfigs.Slot0;
-        slot0Configs.kS = 0.25; 
-        slot0Configs.kV = 0.12; 
-        slot0Configs.kA = 0.01; 
-        slot0Configs.kP = 4.8; 
-        slot0Configs.kI = 0; 
+        slot0Configs.kG = -0.7;
+        slot0Configs.kS = -0.5; 
+        
+        // slot0Configs.kV = 0.12; 
+        // slot0Configs.kA = 0.01;
+        slot0Configs.kV = 0.6; 
+        slot0Configs.kA = 0.8;  
+        slot0Configs.kP = 0.75; 
+        slot0Configs.kI = 0.2; 
         slot0Configs.kD = 0.1;
+        
 
         // Set Motion Magic Expo settings
         var motionMagicConfigs = talonFXConfigs.MotionMagic;
         motionMagicConfigs.MotionMagicCruiseVelocity = 0; 
-        motionMagicConfigs.MotionMagicExpo_kV = 0.12; 
-        motionMagicConfigs.MotionMagicExpo_kA = 0.1; 
+        motionMagicConfigs.MotionMagicExpo_kV = 0.6; 
+        motionMagicConfigs.MotionMagicExpo_kA = 0.8; 
 
         // Apply configurations to the motor
         rightMotor.getConfigurator().apply(talonFXConfigs);
     }
 
-    public void rotateMotor(double rotation) {
+    public void setPose(double Pose) {
         // set target position to 10 rotations
-        rightMotor.setControl(m_request.withPosition(rotation));
+        SmartDashboard.putNumber("elevator pos",leftMotor.getPosition().getValueAsDouble());
+        rightMotor.setControl(m_request.withPosition(Pose));
+        
 
     }
-    
+    public void getPose() {
+        // set target position to 10 rotations
+        SmartDashboard.putNumber("elevator pos",leftMotor.getPosition().getValueAsDouble());
+    }    
     public void setElevatorspeed(double speed){
             leftMotor.set(speed);
             SmartDashboard.putNumber("elevator pos",leftMotor.getPosition().getValueAsDouble());
     }
 
-        public void stopElevator() {
-            rightMotor.set(0);
-        }
+    public void stopElevator() {
+        rightMotor.set(0);
+    }
 
         public Double getSpeed() {
           return rightMotor.get();

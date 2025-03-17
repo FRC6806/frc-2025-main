@@ -23,20 +23,21 @@ public class CoralIntake extends SubsystemBase {
     private TalonFX rolls; 
     private TalonFX wrist;
     private TalonFX algae;
-    private final double highPosition = 48;
-    private final double middlePosition = 24;
-    private final double lowPosition = 12;
-    private final double playerStation = 10;
-    private final double startPosition = 0;
-    private final double deadband = 0.1;
+    public static final double ALGAE_SHOOT = 94;
+    public static final double PLAYER_STATION = 87;
+    public static final double CORAL_SCORE = 50;
+    public static final double BACK_IN_ROBOT = 6;
+    public static final double startPosition = 0;
+    public static final double deadband = 0.1;
+    
    // private LaserCan lasercan = new LaserCan(62);
 
     private final CANBus canbus;
     final PositionVoltage m_request = new PositionVoltage(0).withSlot(0);
 
 
-    public CoralIntake(int canID1, int canID2, int canID3, CANBus cb){
-        canbus = cb;
+    public CoralIntake(int canID1, int canID2, int canID3){
+        canbus = new CANBus("elevator");
         TalonFX r = new TalonFX(canID1, canbus);
         TalonFX w = new TalonFX(canID2, canbus);
         TalonFX a = new TalonFX(canID3, canbus);
@@ -47,9 +48,11 @@ public class CoralIntake extends SubsystemBase {
 
         // Set slot 0 gains
         var slot0Configs = talonFXConfigs.Slot0;
+        slot0Configs.kG = 0.3; //.25
         slot0Configs.kS = 0.00; //.25
-        slot0Configs.kV = 0.12; //.12 
-        slot0Configs.kA = 0.001; 
+        slot0Configs.kV = 0.01
+        ; //.12 
+        slot0Configs.kA = 0.1; 
         slot0Configs.kP = 4.8; 
         slot0Configs.kI = 0; 
         slot0Configs.kD = 0.1;
@@ -90,7 +93,9 @@ public class CoralIntake extends SubsystemBase {
     public void CoralIntakeSpeed(double speed){
        rolls.set(speed);
     }
-
+    public void AlgaeIntakeSpeed(double speed){
+        algae.set(speed);
+     }
     public void startWrist(){
         wrist.setControl(m_request.withPosition(startPosition));
     }
@@ -102,21 +107,21 @@ public class CoralIntake extends SubsystemBase {
         SmartDashboard.putNumber("wrist pos", wrist.getPosition().getValueAsDouble());
     }
 
-    public void playerStation(){
-        wrist.setControl(m_request.withPosition(playerStation));
-    }
+    // public void playerStation(){
+    //     wrist.setControl(m_request.withPosition(playerStation));
+    // }
 
-    public void lowReef(){
-        wrist.setControl(m_request.withPosition(lowPosition));
-    }
+    // public void lowReef(){
+    //     wrist.setControl(m_request.withPosition(lowPosition));
+    // }
 
-    public void midReef(){
-        wrist.setControl(m_request.withPosition(middlePosition));
-    }
+    // public void midReef(){
+    //     wrist.setControl(m_request.withPosition(middlePosition));
+    // }
 
-    public void highReef(){
-        wrist.setControl(m_request.withPosition(highPosition));
-    }
+    // public void highReef(){
+    //     wrist.setControl(m_request.withPosition(highPosition));
+    // }
 
     // public void laserPeriod(){
     //     double meters = getMeasurement();

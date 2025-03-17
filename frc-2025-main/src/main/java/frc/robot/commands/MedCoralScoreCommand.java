@@ -21,11 +21,11 @@ public class MedCoralScoreCommand extends SequentialCommandGroup {
     
    
         addCommands(
-            new InstantCommand(() -> s_Elevator.rotateMotor(10)),
+            new InstantCommand(() -> s_Elevator.setPose(10)),
             new WaitCommand(1),
             new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(-1.0)),
             new WaitCommand(1),
-            new InstantCommand(() -> s_Elevator.rotateMotor(0)),
+            new InstantCommand(() -> s_Elevator.setPose(0)),
             new WaitCommand(1)
             
         );
