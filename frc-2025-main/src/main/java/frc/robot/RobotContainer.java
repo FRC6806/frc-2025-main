@@ -18,6 +18,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,8 +40,6 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.CoralIntake;
 
 public class RobotContainer {
-    //private final CANBus canbus = new CANBus("elavator");
-    //private final TalonFX m3 = new TalonFX(0,canbus);
 
     private final VisionSystem s_Vision = new VisionSystem("photonvision");
     public final PoleAlignment align = new PoleAlignment (s_Vision); 
@@ -125,15 +124,32 @@ public class RobotContainer {
     JoystickButton operatorX = new JoystickButton(operator, XboxController.Button.kX.value);
     JoystickButton operatorY = new JoystickButton(operator, XboxController.Button.kY.value);
 
+    JoystickButton thumbutton = new JoystickButton(joystick.getHID(), 2); //put intake on the real later 
+    JoystickButton drivertrigger = new JoystickButton(joystick.getHID(), 1); //put score on the real later 
 
-    operatorA.whileTrue(new InstantCommand(()-> coralScore.wristspeed(0.2)));
-    operatorA.whileFalse(new InstantCommand(()-> coralScore.wristspeed(0)));
+
+
+    // operatorX.onTrue(new InstantCommand(()-> coralScore.wristpose(CoralIntake.PLAYER_STATION))); 
+    // operatorX.whileTrue(new InstantCommand(()-> coralScore.CoralIntakeSpeed(-1)));
+    // operatorX.whileFalse(new InstantCommand(()-> coralScore.CoralIntakeSpeed(0)));
+    // operatorB.whileTrue(new InstantCommand(()-> coralScore.CoralIntakeSpeed(0)));
+
+    // operatorY.onTrue(new InstantCommand(()-> coralScore.wristpose(CoralIntake.CORAL_SCORE))); 
+    // operatorY.whileTrue(new InstantCommand(()-> coralScore.CoralIntakeSpeed(1)));
+    // operatorY.whileFalse(new InstantCommand(()-> coralScore.CoralIntakeSpeed(0)));
+
     // operatorB.whileTrue(new InstantCommand(()-> coralScore.wristspeed(-.2)));
     // operatorB.whileFalse(new InstantCommand(()-> coralScore.wristspeed(0)));
-    operatorB.onTrue(new InstantCommand(()-> elevator.getPose()));
-    operatorX.onTrue(new InstantCommand(()-> elevator.setPose(-10)));
-    operatorY.onTrue(new InstantCommand(()-> elevator.setPose(0)));
-   // operatorX.onTrue(new InstantCommand(()-> coralScore.wristpose(CoralIntake.CORAL_SCORE))); 
+
+    // operatorB.onTrue(new InstantCommand(()-> elevator.getPose()));
+    // operatorX.onTrue(new InstantCommand(()-> elevator.setPose(-10)));
+    // operatorY.onTrue(new InstantCommand(()-> elevator.setPose(0)));
+    // operatorA.onTrue(new InstantCommand(()-> elevator.setPose(-20)));
+
+
+
+    operatorA.onTrue( new Alignment(drivetrain, s_Vision));
+
     //operatorY.onTrue(new InstantCommand(()-> coralScore.wristpose(CoralIntake.BACK_IN_ROBOT))); //low pos
     //operatorY.onTrue(new InstantCommand(()-> coralScore.wristpose(CoralIntake.PLAYER_STATION))); 
    //operatorY.onTrue(new InstantCommand(()-> coralScore.wristpose(CoralIntake.ALGAE_SHOOT))); 

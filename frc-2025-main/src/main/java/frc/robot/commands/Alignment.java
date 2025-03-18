@@ -41,6 +41,7 @@ public class Alignment extends Command {
     private double yawChange;
     private double rotChange;
     private final SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric();
+    private double TargetYaw = 25;
     // private boolean end;
 
 
@@ -59,10 +60,6 @@ public class Alignment extends Command {
 
 public void intitialize(){
 
-
-
-
-       
     run = true;
 }
 
@@ -83,15 +80,20 @@ public void end(boolean interupted){
 
 
 public boolean isFinished(){
-    if ( Math.abs(s_Vision.getYaw()) <= 5)
+
+
+    // if(! s_Vision.HasTarget()){
+    //     return true;
+    // }
+
+  //  if ( Math.abs(s_Vision.getPitch() - 17) <= .5 && 
+    
+    if ( Math.abs(s_Vision.getYaw() - TargetYaw) <= 3)
      {
           return true;
     }else {
         return false;
    }
-
-
-
 
    
 }
@@ -111,16 +113,14 @@ public void setEnd(){
        
 
 
+        double TARGETPITCH = 17;
 
-
-        //if( Math.abs(s_Vision.getYaw()) > 2){
-            yawChange = s_Vision.getYaw();
-            yawChange /= -30.0;
-        //}
-        //if( Math.abs(s_Vision.getPitch()) > 2){
-            pitchChange = s_Vision.getPitch();
-            pitchChange /= -23.0;
-        //}
+        if(s_Vision.HasTarget() ){
+            yawChange = s_Vision.getYaw() -TargetYaw;
+            yawChange /= -30;
+            pitchChange = s_Vision.getPitch() - 17;
+            pitchChange /= -5.0;
+        }
 
 
         SmartDashboard.putNumber("pitchChange", pitchChange);
@@ -132,8 +132,9 @@ public void setEnd(){
 
             if(isFinished() == false){
             s_Swerve.setControl(
-              drive.withVelocityX(pitchChange)
-                 .withVelocityY(yawChange)
+              drive.withVelocityX(0)
+                 .withVelocityY(yawChan
+                 ge)
                  .withRotationalRate(0)
             ); }
 
