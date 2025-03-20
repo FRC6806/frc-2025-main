@@ -3,34 +3,16 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
-
-
-
-
 import frc.robot.Constants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.VisionSystem;
-
-
-
-
 import com.ctre.phoenix6.swerve.SwerveRequest;
-
-
-
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-
-
-
-
-
-
 
 
 public class Alignment extends Command {    
@@ -41,7 +23,8 @@ public class Alignment extends Command {
     private double yawChange;
     private double rotChange;
     private final SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric();
-    private double TargetYaw = 25;
+    private double TargetYaw = 30; //og 35
+    private double TargetPitch = 17;
     // private boolean end;
 
 
@@ -86,7 +69,7 @@ public boolean isFinished(){
     //     return true;
     // }
 
-  //  if ( Math.abs(s_Vision.getPitch() - 17) <= .5 && 
+    // if ( Math.abs(s_Vision.getPitch() - 17) <= .5) 
     
     if ( Math.abs(s_Vision.getYaw() - TargetYaw) <= 3)
      {
@@ -94,6 +77,7 @@ public boolean isFinished(){
     }else {
         return false;
    }
+   
 
    
 }
@@ -113,12 +97,12 @@ public void setEnd(){
        
 
 
-        double TARGETPITCH = 17;
+    
 
         if(s_Vision.HasTarget() ){
             yawChange = s_Vision.getYaw() -TargetYaw;
             yawChange /= -30;
-            pitchChange = s_Vision.getPitch() - 17;
+            pitchChange = s_Vision.getPitch() - TargetPitch;
             pitchChange /= -5.0;
         }
 
@@ -132,9 +116,8 @@ public void setEnd(){
 
             if(isFinished() == false){
             s_Swerve.setControl(
-              drive.withVelocityX(0)
-                 .withVelocityY(yawChan
-                 ge)
+              drive.withVelocityX(pitchChange)
+                 .withVelocityY(yawChange)
                  .withRotationalRate(0)
             ); }
 
