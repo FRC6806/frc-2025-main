@@ -45,13 +45,13 @@ public class Climb extends SubsystemBase{
         // Apply configurations to the motor
         clamp.getConfigurator().apply(talonFXConfigs);
     }
-    public void startClimb(){
-        clamp.setControl(m_request.withPosition(startPosition));
+    public void climbSpeed(double speed){
+        clamp.set(speed);
     }
 
-    public void endClimb(){
-        clamp.setControl(m_request.withPosition(climbPosition));
-    }
+    // public void endClimb(){
+    //     clamp.setControl(m_request.withPosition(climbPosition));
+    // }
 
 }
 

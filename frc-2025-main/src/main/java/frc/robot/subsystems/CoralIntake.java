@@ -25,6 +25,7 @@ public class CoralIntake extends SubsystemBase {
     private TalonFX algae;
     public static final double ALGAE_SHOOT = 94;
     public static final double PLAYER_STATION = 87;
+    public static final double MOVE_ELEVATOR = 20;
     public static final double CORAL_SCORE = 50;
     public static final double BACK_IN_ROBOT = 6;
     public static final double startPosition = 0;
@@ -106,29 +107,8 @@ public class CoralIntake extends SubsystemBase {
         wrist.set(speed);
         SmartDashboard.putNumber("wrist pos", wrist.getPosition().getValueAsDouble());
     }
-
-    // public void playerStation(){
-    //     wrist.setControl(m_request.withPosition(playerStation));
-    // }
-
-    // public void lowReef(){
-    //     wrist.setControl(m_request.withPosition(lowPosition));
-    // }
-
-    // public void midReef(){
-    //     wrist.setControl(m_request.withPosition(middlePosition));
-    // }
-
-    // public void highReef(){
-    //     wrist.setControl(m_request.withPosition(highPosition));
-    // }
-
-    // public void laserPeriod(){
-    //     double meters = getMeasurement();
-    //     if(meters > 0.0635 && meters < .1524) {
-    //         rolls.set(0);
-    //     }
-    // }
-    
+    public void outOfWay(){
+        wrist.setControl(m_request.withPosition(MOVE_ELEVATOR));
+    }
 }
 

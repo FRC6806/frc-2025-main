@@ -9,6 +9,8 @@ import com.ctre.phoenix6.signals.ControlModeValue;
 import edu.wpi.first.wpilibj2.command.Command;
 */
 
+import java.util.concurrent.TimeUnit;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.*;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -38,7 +40,7 @@ public class Elevator extends SubsystemBase {
 
         // Set slot 0 gains
         var slot0Configs = talonFXConfigs.Slot0;
-        slot0Configs.kG = -0.7;
+        slot0Configs.kG = -0.65;
         slot0Configs.kS = -0.5; 
         
         // slot0Configs.kV = 0.12; 
@@ -46,7 +48,7 @@ public class Elevator extends SubsystemBase {
         slot0Configs.kV = 0.6; 
         slot0Configs.kA = 0.8;  
         slot0Configs.kP = 0.75; 
-        slot0Configs.kI = 0.2; 
+        slot0Configs.kI = 0.4; 
         slot0Configs.kD = 0.1;
         
 
@@ -67,10 +69,88 @@ public class Elevator extends SubsystemBase {
         
 
     }
-    public void getPose() {
+    public void startPose() {
         // set target position to 10 rotations
-        SmartDashboard.putNumber("elevator pos",leftMotor.getPosition().getValueAsDouble());
+        
+        rightMotor.setControl(m_request.withPosition(-1));
+        try {
+            TimeUnit.MILLISECONDS.sleep(800);
+            m_request.Velocity = 1;
+            m_request.FeedForward = 1;
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            System.out.print("Error");
+        }
+        rightMotor.setControl(m_request.withPosition(0));
+        m_request.Velocity = 0.6;
+        m_request.FeedForward = 0.8;
+    }
+    public void lowPose() {
+                // set target position to 10 rotations
+        
+                rightMotor.setControl(m_request.withPosition(-4));
+                try {
+                    TimeUnit.MILLISECONDS.sleep(800);
+                    m_request.Velocity = 1;
+                    m_request.FeedForward = 1;
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    System.out.print("Error");
+                }
+                rightMotor.setControl(m_request.withPosition(-3));
+                m_request.Velocity = 0.6;
+                m_request.FeedForward = 0.8;
     }    
+    public void midPos1() {
+        // set target position to 10 rotations
+
+        rightMotor.setControl(m_request.withPosition(-9));
+        try {
+            TimeUnit.MILLISECONDS.sleep(800);
+            m_request.Velocity = 1;
+            m_request.FeedForward = 1;
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            System.out.print("Error");
+        }
+        rightMotor.setControl(m_request.withPosition(-8));
+        m_request.Velocity = 0.6;
+        m_request.FeedForward = 0.8;
+    }   
+
+    public void midPos2() {
+        // set target position to 10 rotations
+
+        rightMotor.setControl(m_request.withPosition(-14));
+        try {
+            TimeUnit.MILLISECONDS.sleep(800);
+            m_request.Velocity = 1;
+            m_request.FeedForward = 1;
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            System.out.print("Error");
+        }
+        rightMotor.setControl(m_request.withPosition(-13));
+        m_request.Velocity = 0.6;
+        m_request.FeedForward = 0.8;
+    }   
+    public void highPos() {
+        // set target position to 10 rotations
+
+        rightMotor.setControl(m_request.withPosition(-19));
+        try {
+            TimeUnit.MILLISECONDS.sleep(800);
+            m_request.Velocity = 1;
+            m_request.FeedForward = 1;
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            System.out.print("Error");
+        }
+        rightMotor.setControl(m_request.withPosition(-18));
+        m_request.Velocity = 0.6;
+        m_request.FeedForward = 0.8;
+    }   
+
     public void setElevatorspeed(double speed){
             leftMotor.set(speed);
             SmartDashboard.putNumber("elevator pos",leftMotor.getPosition().getValueAsDouble());
@@ -80,9 +160,9 @@ public class Elevator extends SubsystemBase {
         rightMotor.set(0);
     }
 
-        public Double getSpeed() {
-          return rightMotor.get();
-        }
+    public Double getSpeed() {
+        return rightMotor.get();
+    }
 
 
 }

@@ -1,6 +1,6 @@
 package frc.robot.commands;
 
-public class AlgaeIntakeCommand {
+public class AlgaeIntake {
     //flip over with wrist\
     //set elevator height
     //activate algea intake
