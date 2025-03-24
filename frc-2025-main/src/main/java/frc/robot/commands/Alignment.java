@@ -75,12 +75,13 @@ public boolean isFinished(){
     }else {
       return false;
     }
-   // if ( Math.abs(s_Vision.getYaw() - TargetYaw) <= 3)
-    // {
-    //      return true;
-  //  }else {
-   //     return false;
-  // }
+  
+    if ( Math.abs(s_Vision.getYaw() - TargetYaw) <= 3)
+    {
+      return true;
+    }else {
+        return false;
+   }
    
 
    
@@ -104,10 +105,10 @@ public void setEnd(){
     
 
         if(s_Vision.HasTarget() ){
-           // yawChange = s_Vision.getYaw() -TargetYaw;
-          //  yawChange /= -30;
-            // pitchChange = s_Vision.getPitch() - TargetPitch;
-            // pitchChange /= -5.0; FOR CAIT LATER: U MAY NOT NEED THIS> TRY DOING WITH JUST TARGET PITCH
+            yawChange = s_Vision.getYaw() -TargetYaw;
+            yawChange /= -30;
+            pitchChange = s_Vision.getPitch() - TargetPitch;
+            pitchChange /= -5.0;
         }
 
 
@@ -120,12 +121,10 @@ public void setEnd(){
 
             if(isFinished() == false){
             s_Swerve.setControl(
-              // TEST!!!!!!!
-              drive.withVelocityY(.2) 
+              
+             drive.withVelocityX(0) //pitchchange for front and back 0 for not that BACK W/ NOTE FROM B4, MAKE SUPER SLOW 
+                .withVelocityY(yawChange)
                 .withRotationalRate(0)
-             // drive.withVelocityX(0) //pitchchange for front and back 0 for not that BACK W/ NOTE FROM B4, MAKE SUPER SLOW 
-                 //.withVelocityY(yawChange)
-                 //.withRotationalRate(0)
             ); }
 
 
