@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Values {
     private static int level = 0;
     private static boolean scoreMode = true; //t=algae
@@ -19,15 +21,9 @@ public class Values {
 
     public static void increaseLevel(){
         level++;
-        level = level % 4;
     }
     public static void decreaseLevel(){
-        if(level == 0){
-            level = 3;
-        }
-        else{
         level--;
-        }
     }
 
     public static void changeScoreMode(){
@@ -38,16 +34,30 @@ public class Values {
     }
 
 
-    public static int getLevel(){
-        return level +1;
-    }
-
-    public static String getLeftOrRight(){
-        if(leftOrRight){
-            return "right";
+    public static double getLevel(){
+        if (level == 1){ //works
+            return -1;
+        }
+        else if (level == 2){ //works
+            return -12;
+        }
+        else if (level == 3){ //needs to be tested 
+            return -30;   
         }
         else{
-            return "left";
+            return 0;
+        }
+        
+
+    }
+    
+
+    public static double getLeftOrRight(){
+        if(leftOrRight){
+            return -30;
+        }
+        else{
+            return 30;
         }
     }
     public static String getScoreMode(){

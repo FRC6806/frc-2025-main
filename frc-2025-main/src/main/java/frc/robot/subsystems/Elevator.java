@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.*;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,6 +25,7 @@ public class Elevator extends SubsystemBase {
     
     private TalonFX rightMotor; 
     private TalonFX leftMotor; 
+    
     // create a position closed-loop request, voltage output, slot 0 configs
     final PositionVoltage m_request = new PositionVoltage(0).withSlot(0);
 
@@ -40,9 +42,9 @@ public class Elevator extends SubsystemBase {
 
         // Set slot 0 gains
         var slot0Configs = talonFXConfigs.Slot0;
-        slot0Configs.kG = -0.65;
+        slot0Configs.kG = -0.65; //-0.65
         slot0Configs.kS = -0.5; 
-        
+        slot0Configs.GravityType = GravityTypeValue.Elevator_Static;
         // slot0Configs.kV = 0.12; 
         // slot0Configs.kA = 0.01;
         slot0Configs.kV = 0.6; 
@@ -63,20 +65,26 @@ public class Elevator extends SubsystemBase {
     }
 
     public void setPose(double Pose) {
-        // set target position to 10 rotations
-        SmartDashboard.putNumber("elevator pos",leftMotor.getPosition().getValueAsDouble());
+        rightMotor.setControl(m_request.withPosition(Pose - 1));
+        try {
+            TimeUnit.MILLISECONDS.sleep(800);
+            m_request.Velocity = .5;
+            m_request.FeedForward = .5;
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            System.out.print("Error");
+        }
         rightMotor.setControl(m_request.withPosition(Pose));
-        
-
+        m_request.Velocity = 0.6;
+        m_request.FeedForward = 0.8;
     }
     public void startPose() {
         // set target position to 10 rotations
-        
         rightMotor.setControl(m_request.withPosition(-1));
         try {
             TimeUnit.MILLISECONDS.sleep(800);
-            m_request.Velocity = 1;
-            m_request.FeedForward = 1;
+            m_request.Velocity = .5;
+            m_request.FeedForward = .5;
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             System.out.print("Error");
@@ -137,7 +145,7 @@ public class Elevator extends SubsystemBase {
     public void highPos() {
         // set target position to 10 rotations
 
-        rightMotor.setControl(m_request.withPosition(-19));
+        rightMotor.setControl(m_request.withPosition(-20));
         try {
             TimeUnit.MILLISECONDS.sleep(800);
             m_request.Velocity = 1;

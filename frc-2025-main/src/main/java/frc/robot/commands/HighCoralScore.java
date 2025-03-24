@@ -30,14 +30,15 @@ public class HighCoralScore extends SequentialCommandGroup {
             // new Alignment(s_swerve, s_Vision),
             // new InstantCommand(() -> s_CoralIntake.wristpose(CoralIntake.CORAL_SCORE)),
             new WaitCommand(1),
-            new InstantCommand(() -> s_Elevator.highPos()),
-            new WaitCommand(1),
-            new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(1.0)),
-            new WaitCommand(3),
-            new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(0)),
-            new WaitCommand(1),
-            new InstantCommand(() -> s_Elevator.startPose()),
-            new WaitCommand(1)
+            new InstantCommand(() -> s_Elevator.highPos())
+            
+            // new WaitCommand(1),
+            // new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(1.0)),
+            // new WaitCommand(3),
+            // new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(0)),
+            // new WaitCommand(1),
+            // new InstantCommand(() -> s_Elevator.startPose()),
+            // new WaitCommand(1)
         );
     }
 

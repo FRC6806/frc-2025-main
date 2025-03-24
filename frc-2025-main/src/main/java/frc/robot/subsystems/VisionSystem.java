@@ -62,8 +62,9 @@ public class VisionSystem extends SubsystemBase {
       return target.getPitch();
     }
     else{
-      return 0;}
+      return 0;} // HIIII GUYS GOOOD LUCKKKKKKKKKKKKKKKKKKKKK - nicole :DDDDD
     }
+    
     public double getskew(){
       var result = camera.getLatestResult();
       PhotonTrackedTarget target = result.getBestTarget();

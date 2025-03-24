@@ -9,6 +9,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralIntake;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.VisionSystem;
+import frc.robot.subsystems.Values;
 
  
 public class ScoreCoral extends SequentialCommandGroup { 
@@ -16,29 +17,32 @@ public class ScoreCoral extends SequentialCommandGroup {
     private Elevator s_Elevator;
     private VisionSystem s_Vision;
     private CommandSwerveDrivetrain s_swerve;
+    private double position;
     
-    public ScoreCoral(Elevator elevator, CoralIntake coralIntake, VisionSystem vision, CommandSwerveDrivetrain swerve){
+    public ScoreCoral(Elevator elevator, CoralIntake coralIntake, VisionSystem vision, CommandSwerveDrivetrain swerve, double position){
         this.s_Elevator = elevator;
         this.s_CoralIntake =coralIntake;
         this.s_Vision =vision;
         this.s_swerve =swerve;
+        this.position = position;
 
         
    
         addCommands(
-            new InstantCommand(() -> s_CoralIntake.wristpose(CoralIntake.MOVE_ELEVATOR)),
+            new InstantCommand(() -> s_CoralIntake.wristpose(CoralIntake.CORAL_SCORE)),
             new WaitCommand(1),
-            // new Alignment(s_swerve, s_Vision),
-            // new InstantCommand(() -> s_CoralIntake.wristpose(CoralIntake.CORAL_SCORE)),
-            new WaitCommand(1),
-            new InstantCommand(() -> s_Elevator.lowPose()),
-            new WaitCommand(1),
-            new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(1.0)),
-            new WaitCommand(3),
-            new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(0)),
-            new WaitCommand(1),
-            new InstantCommand(() -> s_Elevator.startPose()),
-            new WaitCommand(1)
+            //new Alignment(s_swerve, s_Vision, this.position),
+            new InstantCommand(() -> s_CoralIntake.wristpose(77)),
+            //new InstantCommand(() -> s_CoralIntake.wristpose(75)),
+            new InstantCommand(() -> s_Elevator.setPose(Values.getLevel()))
+            // new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(1.0)), //changed from pos to neg -robert
+            // new WaitCommand(3),
+            // new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(0)),
+            // new WaitCommand(1),
+            // new InstantCommand(() -> s_Elevator.startPose()),
+            // new WaitCommand(1),
+            // new InstantCommand(() -> s_CoralIntake.wristpose(CoralIntake.MOVE_ELEVATOR)),
+            // new WaitCommand(1)
         );
     }
 

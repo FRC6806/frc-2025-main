@@ -26,12 +26,8 @@ public class HumanPlayer extends SequentialCommandGroup {
         
    
         addCommands(
-            new InstantCommand(() -> s_CoralIntake.wristpose(CoralIntake.MOVE_ELEVATOR)),
-            new WaitCommand(1),
             // new Alignment(s_swerve, s_Vision),
             // new InstantCommand(() -> s_CoralIntake.wristpose(CoralIntake.CORAL_SCORE)),
-            new WaitCommand(1),
-            new InstantCommand(() -> s_Elevator.midPos2()),
             new WaitCommand(1),
             new InstantCommand(() -> s_CoralIntake.wristpose(20)), // PLEASE TEST THIS NUMBERR PLEASEE
             new WaitCommand(1),

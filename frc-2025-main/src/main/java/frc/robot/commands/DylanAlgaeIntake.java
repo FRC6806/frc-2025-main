@@ -11,13 +11,13 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.VisionSystem;
 
  
-public class AlgaeIntake extends SequentialCommandGroup { 
+public class DylanAlgaeIntake extends SequentialCommandGroup { 
     private CoralIntake s_CoralIntake;   
     private Elevator s_Elevator;
     private VisionSystem s_Vision;
     private CommandSwerveDrivetrain s_swerve; 
     
-    public AlgaeIntake(Elevator elevator, CoralIntake coralIntake, VisionSystem vision, CommandSwerveDrivetrain swerve){
+    public DylanAlgaeIntake(Elevator elevator, CoralIntake coralIntake, VisionSystem vision, CommandSwerveDrivetrain swerve){
         this.s_Elevator = elevator;
         this.s_CoralIntake =coralIntake;
         this.s_Vision =vision;
@@ -34,13 +34,14 @@ public class AlgaeIntake extends SequentialCommandGroup {
             // new Alignment(s_swerve, s_Vision),
             // new InstantCommand(() -> s_CoralIntake.wristpose(CoralIntake.CORAL_SCORE)),
             //new WaitCommand(1),
-            //new InstantCommand(() -> s_Elevator.setPose(0)),
+            //new InstantCommand(() -> s_Elevator.setPose(-5)),
             // new WaitCommand(1),
-            // new InstantCommand(() -> s_CoralIntake.wristpose(15)),
-            // new WaitCommand(1),
-            // new InstantCommand(() -> s_CoralIntake.AlgaeIntakeSpeed(1.5)), //changed to increased speed
-            // new WaitCommand(2),
+            // new InstantCommand(() -> s_CoralIntake.wristpose(CoralIntake.CORAL_SCORE + 5)),
+            // new WaitCommand(5),
             // new InstantCommand(() -> s_CoralIntake.AlgaeIntakeSpeed(0)), //new, to change speed
+            // drivetrain.applyRequest(() -> drive.withVelocityY(-1)),
+            // new WaitCommand(2),
+            // drivetrain.applyRequest(() -> drive.withVelocityY(0)),
             // //new InstantCommand(() -> s_Elevator.setPose(0)),
             // new InstantCommand(() -> s_CoralIntake.wristpose(17)), //new, to get out of the coral lock
             // new WaitCommand(1), // added

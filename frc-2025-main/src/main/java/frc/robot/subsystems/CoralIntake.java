@@ -13,6 +13,7 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.*;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 
 import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
@@ -24,9 +25,10 @@ public class CoralIntake extends SubsystemBase {
     private TalonFX wrist;
     private TalonFX algae;
     public static final double ALGAE_SHOOT = 94;
-    public static final double PLAYER_STATION = 87;
-    public static final double MOVE_ELEVATOR = 20;
-    public static final double CORAL_SCORE = 50;
+    public static final double PLAYER_STATION = 93;
+    public static final double MOVE_ELEVATOR = 30;
+    public static final double CORAL_SCORE = 40;
+    public static final double REEF_ANGLE = 77;
     public static final double BACK_IN_ROBOT = 6;
     public static final double startPosition = 0;
     public static final double deadband = 0.1;
@@ -49,20 +51,20 @@ public class CoralIntake extends SubsystemBase {
 
         // Set slot 0 gains
         var slot0Configs = talonFXConfigs.Slot0;
-        slot0Configs.kG = 0.3; //.25
-        slot0Configs.kS = 0.00; //.25
-        slot0Configs.kV = 0.01
-        ; //.12 
-        slot0Configs.kA = 0.1; 
-        slot0Configs.kP = 4.8; 
-        slot0Configs.kI = 0; 
+        //slot0Configs.GravityType = GravityTypeValue.Arm_Cosine; needs an encoder to work and set variables
+        slot0Configs.kG = 0.5; //.3
+        slot0Configs.kS = 0.6; //.00
+        slot0Configs.kV = 0.3; // 0.01
+        slot0Configs.kA = 0.3; //0.1
+        slot0Configs.kP = 0.75; //4.8
+        slot0Configs.kI = 0.2; //00
         slot0Configs.kD = 0.1;
 
         // Set Motion Magic Expo settings
         var motionMagicConfigs = talonFXConfigs.MotionMagic;
-        motionMagicConfigs.MotionMagicCruiseVelocity = 4000; 
-        motionMagicConfigs.MotionMagicExpo_kV = 0.05; //.12
-        motionMagicConfigs.MotionMagicExpo_kA = 0.02; //.1
+        motionMagicConfigs.MotionMagicCruiseVelocity = 0; 
+        motionMagicConfigs.MotionMagicExpo_kV = 0.5; //.12
+        motionMagicConfigs.MotionMagicExpo_kA = 0.6; //.1
 
         // Apply configurations to the motor
        wrist.getConfigurator().apply(talonFXConfigs);
@@ -109,6 +111,10 @@ public class CoralIntake extends SubsystemBase {
     }
     public void outOfWay(){
         wrist.setControl(m_request.withPosition(MOVE_ELEVATOR));
+    }
+    public void getWrist() {
+        SmartDashboard.putNumber("wristpose", wrist.getPosition().getValueAsDouble());
+
     }
 }
 
