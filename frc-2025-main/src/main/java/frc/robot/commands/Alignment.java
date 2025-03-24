@@ -23,7 +23,7 @@ public class Alignment extends Command {
     private double yawChange;
     private double rotChange;
     private final SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric();
-    private double TargetYaw; // why dont we have one????
+    private double TargetYaw; // this is set later
     private double TargetPitch = 17; // this is what we are trying to get pitch to? seems far 
     // private boolean end;
 
@@ -67,16 +67,20 @@ public boolean isFinished(){
 
     // if(! s_Vision.HasTarget()){
     //     return true;
-    // } why do we even have this, see target then finish? csn i delete 
+    // } 
 
-    // if ( Math.abs(s_Vision.getPitch() - 17) <= .5) what if i did not = to target pitch
-    
-    if ( Math.abs(s_Vision.getYaw() - TargetYaw) <= 3)
-     {
-          return true;
+    if ( Math.abs(s_Vision.getPitch() - 17) <= .5)
+    {
+      return true;
     }else {
-        return false;
-   }
+      return false;
+    }
+   // if ( Math.abs(s_Vision.getYaw() - TargetYaw) <= 3)
+    // {
+    //      return true;
+  //  }else {
+   //     return false;
+  // }
    
 
    
@@ -100,8 +104,8 @@ public void setEnd(){
     
 
         if(s_Vision.HasTarget() ){
-            yawChange = s_Vision.getYaw() -TargetYaw;
-            yawChange /= -30;
+           // yawChange = s_Vision.getYaw() -TargetYaw;
+          //  yawChange /= -30;
             // pitchChange = s_Vision.getPitch() - TargetPitch;
             // pitchChange /= -5.0; FOR CAIT LATER: U MAY NOT NEED THIS> TRY DOING WITH JUST TARGET PITCH
         }
@@ -116,9 +120,12 @@ public void setEnd(){
 
             if(isFinished() == false){
             s_Swerve.setControl(
-              drive.withVelocityX(0) //pitchchange for front and back 0 for not that BACK W/ NOTE FROM B4, MAKE SUPER SLOW 
-                 .withVelocityY(yawChange)
-                 .withRotationalRate(0)
+              // TEST!!!!!!!
+              drive.withVelocityY(.2) 
+                .withRotationalRate(0)
+             // drive.withVelocityX(0) //pitchchange for front and back 0 for not that BACK W/ NOTE FROM B4, MAKE SUPER SLOW 
+                 //.withVelocityY(yawChange)
+                 //.withRotationalRate(0)
             ); }
 
 
