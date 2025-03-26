@@ -3,9 +3,9 @@
   "robotLength": 0.762,
   "holonomicMode": true,
   "pathFolders": [
-    "random",
     "Blue Mid",
-    "GOOD STRAIGHT"
+    "GOOD STRAIGHT",
+    "maybe score"
   ],
   "autoFolders": [],
   "defaultMaxVel": 0.5,

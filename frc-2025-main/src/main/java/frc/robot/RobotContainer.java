@@ -31,8 +31,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.AlgaeIntake;
 import frc.robot.commands.AlgaeScore;
-import frc.robot.commands.Alignment;
-import frc.robot.commands.HighCoralScore;
+import frc.robot.commands.AlignmentYaw;
 import frc.robot.commands.HumanPlayer;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Climb;
@@ -45,6 +44,9 @@ import frc.robot.subsystems.CoralIntake;
 
 import frc.robot.commands.HumanPlayer;
 import frc.robot.commands.AutoCoral;
+import frc.robot.commands.AlignmentAll;
+import frc.robot.commands.AlignmentYaw;
+import frc.robot.commands.AlignmentPitch;
 
 
 public class RobotContainer {
@@ -69,13 +71,15 @@ public class RobotContainer {
     private final CommandXboxController joystick = new CommandXboxController(0);
     private final XboxController operator = new XboxController(1);
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    private final SendableChooser<Command> autoChooser;
-    private final HighCoralScore highCoralScore;
+    //private final SendableChooser<Command> autoChooser;
     private final HumanPlayer humanPlayer;
     private final AlgaeIntake algaeIntake;
     private final AlgaeScore algaeScore;
     private final AutoCoral autoCoral;
-    //private final Alignment alignment;
+   // private final AlignmentAll alignmentAll;
+    // private final AlignmentPitch alignmentPitch;
+    // // private final AlignmentYaw alignmentYaw;
+    // private final AlignmentAll alignmentAll;
  
 
     public RobotContainer() {
@@ -84,11 +88,14 @@ public class RobotContainer {
         elevator = new Elevator(54,51);
         climb = new Climb(53);
 
-        //alignment = new Alignment(drivetrain, s_Vision, MaxAngularRate);
-        //NamedCommands.registerCommand("alignment", alignment);
+    //    alignmentAll = new AlignmentAll(drivetrain, s_Vision, MaxAngularRate);
+    //    NamedCommands.registerCommand("alignment_all", alignmentAll);
 
-        highCoralScore = new HighCoralScore(elevator, coralScore, s_Vision, drivetrain);
-        NamedCommands.registerCommand("highCoral", highCoralScore);
+    //    alignmentPitch = new AlignmentPitch(drivetrain, s_Vision);
+    //    NamedCommands.registerCommand("alignment_pitch", alignmentPitch);
+
+        // alignmentYaw = new AlignmentYaw(drivetrain, s_Vision, Values.getLeftOrRight());
+        // NamedCommands.registerCommand("alignment", alignmentYaw);
 
         humanPlayer = new HumanPlayer(elevator, coralScore, s_Vision, drivetrain);
         NamedCommands.registerCommand("humanPlayer", humanPlayer);
@@ -102,8 +109,8 @@ public class RobotContainer {
         autoCoral = new AutoCoral(elevator, coralScore, s_Vision, drivetrain, 0);
         NamedCommands.registerCommand("autoCoral", autoCoral);
 
-        autoChooser = AutoBuilder.buildAutoChooser("SimpleAuto");
-        SmartDashboard.putData("Auto Mode", autoChooser);
+        //autoChooser = AutoBuilder.buildAutoChooser("SimpleAuto");
+        //SmartDashboard.putData("Auto Mode", autoChooser);
         configureBindings();
     }
 
@@ -112,10 +119,9 @@ public class RobotContainer {
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX((-joystick.getLeftY() * ((-1*joystick.getRawAxis(3))+1) /2) * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY((-joystick.getLeftX()  * ((-1*joystick.getRawAxis(3))+1) /2) * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-(joystick.getRawAxis(2) * ((-1*joystick.getRawAxis(3))+1) /2)* MaxAngularRate) // Drive counterclockwise with negative X (left)
+            drivetrain.applyRequest(() -> drive.withVelocityX((-joystick.getLeftY() * Math.abs(((-joystick.getRawAxis(3))+1) /2)) * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY((joystick.getLeftX()  * Math.abs(((-joystick.getRawAxis(3))+1) /2)) * MaxSpeed) // Drive left with negative X (left)
+                    .withRotationalRate((joystick.getRawAxis(2) * Math.abs(((-joystick.getRawAxis(3))+1) /2))* MaxAngularRate) // Drive counterclockwise with negative X (left)
 
             )
         );
@@ -164,27 +170,28 @@ public class RobotContainer {
     // operatorL2.whileTrue(new InstantCommand(()-> coralScore.wristspeed(1.0)));
     operatorR1.whileTrue(new InstantCommand(()-> elevator.setElevatorspeed(-1.0)));
     operatorR2.whileTrue(new InstantCommand(()-> elevator.setElevatorspeed(1.0)));
-    operatorA.onTrue(new InstantCommand(() -> coralScore.getWrist()));
+  //  operatorA.onTrue(new InstantCommand(() -> coralScore.getWrist()));
     //CLIMBBBBBBBB
 
     //ALIGNMENT PITCH TEST
-    //operatorB.whileTrue(alignment);
+    // operatorB.whileTrue(alignmentAll);
+   
 
 
     driver12Button.whileTrue(new InstantCommand(()-> coralScore.wristspeed(.3)));  
-    driver12Button.whileFalse(new InstantCommand(()-> coralScore.wristspeed(.01))); 
+    driver12Button.whileFalse(new InstantCommand(()-> coralScore.wristspeed(-.01))); 
 
     driver11Button.whileTrue(new InstantCommand(()-> coralScore.wristspeed(-.3))); 
-    driver11Button.whileFalse(new InstantCommand(()-> coralScore.wristspeed(.01))); 
+    driver11Button.whileFalse(new InstantCommand(()-> coralScore.wristspeed(-.01))); 
 
     driver9Button.onTrue(new InstantCommand(()-> coralScore.wristpose(90)));
     driver10Button.onTrue(new InstantCommand(()-> coralScore.wristpose(50))); 
 
     driver7Button.whileTrue(new InstantCommand(()-> coralScore.CoralIntakeSpeed(1))); 
-    driver7Button.whileFalse(new InstantCommand(()-> coralScore.CoralIntakeSpeed(0.1)));
+    driver7Button.whileFalse(new InstantCommand(()-> coralScore.CoralIntakeSpeed(-0.1)));
 
     driver8Button.whileTrue(new InstantCommand(()-> coralScore.CoralIntakeSpeed(-1))); 
-    driver8Button.whileFalse(new InstantCommand(()-> coralScore.CoralIntakeSpeed(.1)));
+    driver8Button.whileFalse(new InstantCommand(()-> coralScore.CoralIntakeSpeed(-.1)));
 
     // driver12Button.onFalse(new InstantCommand(()-> climb.climbSpeed(0))); 
     // driver11Button.onFalse(new InstantCommand(()-> climb.climbSpeed(0)));
@@ -196,9 +203,12 @@ public class RobotContainer {
     //thumbutton.onTrue(algaeIntake);
 
     drivertrigger.onTrue(new ScoreCoral(elevator, coralScore, s_Vision, drivetrain, Values.getLeftOrRight()));
+    //drivertrigger.onTrue(new ScoreCoral(elevator, coralScore, s_Vision, drivetrain, 0));
+    // operatorA.onTrue(alignmentPitch);
 
-    operatorX.onTrue(new InstantCommand(()-> elevator.startPose()));
-    operatorX.onTrue(new InstantCommand(() -> coralScore.wristpose(0)));
+
+    operatorX.onTrue(new InstantCommand(()-> elevator.startPose())); 
+    operatorX.onTrue(new InstantCommand(()-> coralScore.wristpose(0))); 
     // operatorX.whileTrue(new InstantCommand(()->coralScore.AlgaeIntakeSpeed(1))); 
     // operatorX.whileFalse(new InstantCommand(()->coralScore.AlgaeIntakeSpeed(.1))); 
 
@@ -211,9 +221,9 @@ public class RobotContainer {
     // operatorB.whileTrue(algaeScore);
 
     dPadUp.onTrue(new InstantCommand(()-> Values.increaseLevel())); //changed while true to ontrue
-    dPadRight.onTrue(new InstantCommand(()-> Values.setLeftOrRight(true)));
+    dPadRight.onTrue(new InstantCommand(()-> Values.setLeftOrRight(false)));
     dPadDown.onTrue(new InstantCommand(()-> Values.decreaseLevel()));
-    dPadLeft.onTrue(new InstantCommand(()-> Values.setLeftOrRight(false)));
+    dPadLeft.onTrue(new InstantCommand(()-> Values.setLeftOrRight(true)));
     
     }
 
@@ -222,7 +232,8 @@ public class RobotContainer {
         SmartDashboard.putNumber("Rotation D", 0.5);
         SmartDashboard.putNumber("level", Values.getLevel());
         SmartDashboard.putNumber("yaw", s_Vision.getYaw());
-
+        SmartDashboard.putString("direction", Values.getLorR());
+        SmartDashboard.putNumber("direct", Values.getLeftOrRight());
     }
 
 

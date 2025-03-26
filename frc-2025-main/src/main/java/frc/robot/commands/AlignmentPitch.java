@@ -1,4 +1,4 @@
-   // Copyright (c) FIRST and other WPILib contributors.
+// Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 // for cailtin mon, i wrote notes on things to talk to team and dif about 
@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 
-public class Alignment extends Command {    
+public class AlignmentPitch extends Command {    
     private CommandSwerveDrivetrain s_Swerve;    
     private VisionSystem s_Vision;
     private boolean run;
@@ -23,19 +23,18 @@ public class Alignment extends Command {
     private double yawChange;
     private double rotChange;
     private final SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric();
-    private double TargetYaw; // this is set later
-    private double TargetPitch = 17; // this is what we are trying to get pitch to? seems far 
+
+    private double TargetPitch = 20;  
     // private boolean end;
 
 
 
 
-    public Alignment(CommandSwerveDrivetrain s_Swerve,VisionSystem s_Vision, double TargetPitch) {
+    public AlignmentPitch(CommandSwerveDrivetrain s_Swerve,VisionSystem s_Vision) {
         this.s_Vision = s_Vision;
         this.s_Swerve = s_Swerve;
         addRequirements(s_Vision);
         addRequirements(s_Swerve);
-        this.TargetYaw = TargetYaw; //30 for left -30 for right 0 for center
     }
 
 
@@ -65,23 +64,19 @@ public void end(boolean interupted){
 public boolean isFinished(){
 
 
-    // if(! s_Vision.HasTarget()){
-    //     return true;
-    // } 
+    if(! s_Vision.HasTarget()){
+        return true;
+    } 
 
-    if ( Math.abs(s_Vision.getPitch() - 17) <= .5)
+    if ( Math.abs(s_Vision.getPitch() - TargetPitch) <= .5)
     {
       return true;
     }else {
       return false;
     }
-   // if ( Math.abs(s_Vision.getYaw() - TargetYaw) <= 3)
-    // {
-    //      return true;
-  //  }else {
-   //     return false;
-  // }
-   
+
+
+    
 
    
 }
@@ -104,29 +99,37 @@ public void setEnd(){
     
 
         if(s_Vision.HasTarget() ){
-           // yawChange = s_Vision.getYaw() -TargetYaw;
-          //  yawChange /= -30;
-            // pitchChange = s_Vision.getPitch() - TargetPitch;
-            // pitchChange /= -5.0; FOR CAIT LATER: U MAY NOT NEED THIS> TRY DOING WITH JUST TARGET PITCH
+            pitchChange = s_Vision.getPitch() - TargetPitch;
+            pitchChange /= -7.0;
         }
 
 
         SmartDashboard.putNumber("pitchChange", pitchChange);
             SmartDashboard.putNumber("yawChange", yawChange);
             SmartDashboard.putNumber("rotChange", rotChange);
-
+            SmartDashboard.putNumber("THE pitch", s_Vision.getPitch());
 
 
 
             if(isFinished() == false){
             s_Swerve.setControl(
-              // TEST!!!!!!!
-              drive.withVelocityY(.2) 
+              
+             drive.withVelocityX(pitchChange) //pitchchange for front and back 0 for not that BACK W/ NOTE FROM B4, MAKE SUPER SLOW 
+                .withVelocityY(0) 
                 .withRotationalRate(0)
-             .withVelocityX(0) //pitchchange for front and back 0 for not that BACK W/ NOTE FROM B4, MAKE SUPER SLOW 
-                 //.withVelocityY(yawChange)
-                 //.withRotationalRate(0)
-            ); }
+            
+
+            );
+            // if (pitchChange > 0.0001 && pitchChange < 0.1) {
+            //     s_Swerve.setControl(
+              
+            //  drive.withVelocityX(pitchChange) //pitchchange for front and back 0 for not that BACK W/ NOTE FROM B4, MAKE SUPER SLOW 
+            //     .withVelocityY(0) 
+            //     .withRotationalRate(0)
+            
+
+            // ); }
+             }
 
 
 
@@ -142,4 +145,7 @@ public void setEnd(){
 
 
 
-        }}
+
+        }
+       
+        }

@@ -92,6 +92,12 @@ public class Elevator extends SubsystemBase {
         rightMotor.setControl(m_request.withPosition(0));
         m_request.Velocity = 0.6;
         m_request.FeedForward = 0.8;
+        try {
+            TimeUnit.MILLISECONDS.sleep(800);
+        } catch (InterruptedException e) {
+            System.out.print("Error");
+        }
+        rightMotor.set(0);
     }
     public void lowPose() {
                 // set target position to 10 rotations
@@ -122,39 +128,6 @@ public class Elevator extends SubsystemBase {
             System.out.print("Error");
         }
         rightMotor.setControl(m_request.withPosition(-8));
-        m_request.Velocity = 0.6;
-        m_request.FeedForward = 0.8;
-    }   
-
-    public void midPos2() {
-        // set target position to 10 rotations
-
-        rightMotor.setControl(m_request.withPosition(-14));
-        try {
-            TimeUnit.MILLISECONDS.sleep(800);
-            m_request.Velocity = 1;
-            m_request.FeedForward = 1;
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            System.out.print("Error");
-        }
-        rightMotor.setControl(m_request.withPosition(-13));
-        m_request.Velocity = 0.6;
-        m_request.FeedForward = 0.8;
-    }   
-    public void highPos() {
-        // set target position to 10 rotations
-
-        rightMotor.setControl(m_request.withPosition(-20));
-        try {
-            TimeUnit.MILLISECONDS.sleep(800);
-            m_request.Velocity = 1;
-            m_request.FeedForward = 1;
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            System.out.print("Error");
-        }
-        rightMotor.setControl(m_request.withPosition(-18));
         m_request.Velocity = 0.6;
         m_request.FeedForward = 0.8;
     }   

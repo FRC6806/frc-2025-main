@@ -39,9 +39,9 @@ public class DylanAlgaeIntake extends SequentialCommandGroup {
             // new InstantCommand(() -> s_CoralIntake.wristpose(CoralIntake.CORAL_SCORE + 5)),
             // new WaitCommand(5),
             // new InstantCommand(() -> s_CoralIntake.AlgaeIntakeSpeed(0)), //new, to change speed
-            // drivetrain.applyRequest(() -> drive.withVelocityY(-1)),
+            // swerve.setControl(drivetrain.applyRequest(() -> drive.withVelocityX(-1))),
             // new WaitCommand(2),
-            // drivetrain.applyRequest(() -> drive.withVelocityY(0)),
+            // swerve.setControl(drivetrain.applyRequest(() -> drive.withVelocityX(0))),
             // //new InstantCommand(() -> s_Elevator.setPose(0)),
             // new InstantCommand(() -> s_CoralIntake.wristpose(17)), //new, to get out of the coral lock
             // new WaitCommand(1), // added
