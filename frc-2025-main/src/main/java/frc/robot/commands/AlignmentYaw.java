@@ -25,6 +25,9 @@ public class AlignmentYaw extends Command {
     private final SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric();
     private double TargetYaw; // this is set later
 
+    private double TargetPitch = 17; // this is what we are trying to get pitch to? seems far 
+    // private boolean end;
+
     public AlignmentYaw(CommandSwerveDrivetrain s_Swerve,VisionSystem s_Vision, double TargetYaw) {
         this.s_Vision = s_Vision;
         this.s_Swerve = s_Swerve;
@@ -63,7 +66,8 @@ public boolean isFinished(){
     // if(! s_Vision.HasTarget()){
     //     return true;
     // } 
-  
+
+
     if ( Math.abs(s_Vision.getYaw() - TargetYaw) <= 3)
     {
       return true;
@@ -97,7 +101,11 @@ public boolean isFinished(){
             s_Swerve.setControl(
               
              drive.withVelocityX(0) //pitchchange for front and back 0 for not that BACK W/ NOTE FROM B4, MAKE SUPER SLOW 
+<<<<<<< HEAD:frc-2025-main/src/main/java/frc/robot/commands/AlignmentYaw.java
                 .withVelocityY(yawChange) 
+=======
+                .withVelocityY(yawChange)
+>>>>>>> a226988dc34132096e863afb6f20641b4a1aa51a:frc-2025-main/src/main/java/frc/robot/commands/Alignment.java
                 .withRotationalRate(0)
             ); }
  
