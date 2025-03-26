@@ -75,12 +75,17 @@ public class RobotContainer {
     private final AlgaeIntake algaeIntake;
     private final AlgaeScore algaeScore;
     private final AutoCoral autoCoral;
+    //private final Alignment alignment;
+ 
 
     public RobotContainer() {
         // Subsystem initialization
         coralScore = new CoralIntake(55,52,60);
         elevator = new Elevator(54,51);
         climb = new Climb(53);
+
+        //alignment = new Alignment(drivetrain, s_Vision, MaxAngularRate);
+        //NamedCommands.registerCommand("alignment", alignment);
 
         highCoralScore = new HighCoralScore(elevator, coralScore, s_Vision, drivetrain);
         NamedCommands.registerCommand("highCoral", highCoralScore);
@@ -115,10 +120,10 @@ public class RobotContainer {
             )
         );
 
-        joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        joystick.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
-        ));
+        //joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        //joystick.b().whileTrue(drivetrain.applyRequest(() ->
+         //   point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
+        //));
 
        
         // Run SysId routines when holding back/start and X/Y.
@@ -161,6 +166,10 @@ public class RobotContainer {
     operatorR2.whileTrue(new InstantCommand(()-> elevator.setElevatorspeed(1.0)));
     operatorA.onTrue(new InstantCommand(() -> coralScore.getWrist()));
     //CLIMBBBBBBBB
+
+    //ALIGNMENT PITCH TEST
+    //operatorB.whileTrue(alignment);
+
 
     driver12Button.whileTrue(new InstantCommand(()-> coralScore.wristspeed(.3)));  
     driver12Button.whileFalse(new InstantCommand(()-> coralScore.wristspeed(.01))); 
@@ -218,7 +227,7 @@ public class RobotContainer {
 
 
     public Command getAutonomousCommand() {
-        return (new PathPlannerAuto("Red"));
+        return (new PathPlannerAuto("maybe score"));
        //return new SequentialCommandGroup( new PathPlannerAuto("SimpleAuto") , motor2.withTimeout(.5 ));
     }
 }
