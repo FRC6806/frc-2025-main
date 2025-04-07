@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "straight"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "autoIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "straight"
+                }
+              }
+            ]
           }
         }
       ]

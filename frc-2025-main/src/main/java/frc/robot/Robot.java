@@ -37,8 +37,11 @@ public class Robot extends TimedRobot {
      * This example is sufficient to show that vision integration is possible, though exact implementation
      * of how to use vision should be tuned per-robot and to the team's specification.
      */
+    SmartDashboard.putNumber("Algae level", Values.getAlgaeLevel());
+    SmartDashboard.putNumber("Coral level", Values.getCoralLevel());
     SmartDashboard.putNumber("Rotation P", 100);
     SmartDashboard.putNumber("Rotation D", 0.5);
+
     if (kUseLimelight) {
       var llMeasurement = Vision.getBotPoseEstimate_wpiBlue("limelight");
       if (llMeasurement != null) {

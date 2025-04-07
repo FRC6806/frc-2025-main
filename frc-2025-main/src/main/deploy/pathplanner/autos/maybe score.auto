@@ -5,9 +5,41 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "score1"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "score1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "autoCoral"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "autoOuttake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Score2"
+                }
+              }
+            ]
           }
         }
       ]

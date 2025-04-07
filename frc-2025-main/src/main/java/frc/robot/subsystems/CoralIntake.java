@@ -25,9 +25,9 @@ public class CoralIntake extends SubsystemBase {
     private TalonFX wrist;
     private TalonFX algae;
     public static final double ALGAE_SHOOT = 94;
-    public static final double PLAYER_STATION = 93;
+    public static final double PLAYER_STATION = 90;
     public static final double MOVE_ELEVATOR = 30;
-    public static final double CORAL_SCORE = 47;
+    public static final double CORAL_SCORE = 60;
     public static final double REEF_ANGLE = 77;
     public static final double BACK_IN_ROBOT = 6;
     public static final double startPosition = 0;

@@ -11,13 +11,13 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.VisionSystem;
 
  
-public class AlgaeIntake extends SequentialCommandGroup { 
+public class AutoAlgae extends SequentialCommandGroup { 
     private CoralIntake s_CoralIntake;   
     private Elevator s_Elevator;
     private VisionSystem s_Vision;
     private CommandSwerveDrivetrain s_swerve; 
     
-    public AlgaeIntake(Elevator elevator, CoralIntake coralIntake, VisionSystem vision, CommandSwerveDrivetrain swerve){
+    public AutoAlgae(Elevator elevator, CoralIntake coralIntake, VisionSystem vision, CommandSwerveDrivetrain swerve){
         this.s_Elevator = elevator;
         this.s_CoralIntake =coralIntake;
         this.s_Vision =vision;
@@ -26,9 +26,9 @@ public class AlgaeIntake extends SequentialCommandGroup {
         
    
         addCommands(
-            new InstantCommand(() -> s_CoralIntake.wristpose(CoralIntake.MOVE_ELEVATOR)),
+            new InstantCommand(() -> s_CoralIntake.wristpose(30)),
             new WaitCommand(1),
-            new InstantCommand(()-> elevator.setPose(-4))
+            new InstantCommand(()-> elevator.setPose(-5))
             //new InstantCommand(() -> s_CoralIntake.AlgaeIntakeSpeed(1.5)) //changed to increased speed
 
             // new Alignment(s_swerve, s_Vision),

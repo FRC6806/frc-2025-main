@@ -11,14 +11,14 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.VisionSystem;
 
  
-public class AutoCoral extends SequentialCommandGroup { 
+public class AutoIntake extends SequentialCommandGroup { 
    private CoralIntake s_CoralIntake;   
     private Elevator s_Elevator;
     private VisionSystem s_Vision;
     private CommandSwerveDrivetrain s_swerve;
     private double position;
     
-    public AutoCoral(Elevator elevator, CoralIntake coralIntake, VisionSystem vision, CommandSwerveDrivetrain swerve, double position){
+    public AutoIntake(Elevator elevator, CoralIntake coralIntake, VisionSystem vision, CommandSwerveDrivetrain swerve, double position){
         this.s_Elevator = elevator;
         this.s_CoralIntake =coralIntake;
         this.s_Vision =vision;
@@ -26,18 +26,11 @@ public class AutoCoral extends SequentialCommandGroup {
         this.position = position; 
    
         addCommands(
-            new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(-1.0)),
+            new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(-1)),
             new WaitCommand(1),
-            new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(0)),
-            new InstantCommand(() -> s_CoralIntake.wristpose(64))
-            // new Alignment(s_swerve, s_Vision),
-            // new InstantCommand(() -> s_CoralIntake.wristpose(CoralIntake.CORAL_SCORE)),
-            // new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(-1.0)),
-            // new WaitCommand(3),
-            // new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(0))
+            new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(0))
         );
     }
 
 }
     
-

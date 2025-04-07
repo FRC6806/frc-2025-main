@@ -24,13 +24,13 @@ public class AlignmentPitch extends Command {
     private double rotChange;
     private final SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric();
 
-    private double TargetPitch = 20;  
+    private double TargetPitch;  
     // private boolean end;
 
 
 
 
-    public AlignmentPitch(CommandSwerveDrivetrain s_Swerve,VisionSystem s_Vision) {
+    public AlignmentPitch(CommandSwerveDrivetrain s_Swerve,VisionSystem s_Vision,double TargetPitch) {
         this.s_Vision = s_Vision;
         this.s_Swerve = s_Swerve;
         addRequirements(s_Vision);
@@ -54,6 +54,7 @@ public void end(boolean interupted){
        .withVelocityY(0)
        .withRotationalRate(0)
  );
+
 
 
 }
@@ -99,8 +100,11 @@ public void setEnd(){
     
 
         if(s_Vision.HasTarget() ){
-            pitchChange = s_Vision.getPitch() - TargetPitch;
+            pitchChange = s_Vision.getPitch() - (TargetPitch);
             pitchChange /= -7.0;
+            if (pitchChange <= 0.2){
+                pitchChange = 0.2;
+            }
         }
 
 
