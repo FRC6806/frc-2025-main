@@ -10,12 +10,14 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -29,10 +31,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.ScoreCoral;
-import frc.robot.commands.AlgaeIntake;
-import frc.robot.commands.AlgaeScore;
+import frc.robot.commands.AutoAlgae;
+import frc.robot.commands.ScoreAlgae;
 import frc.robot.commands.AlignmentYaw;
-import frc.robot.commands.HumanPlayer;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -42,12 +43,15 @@ import frc.robot.subsystems.PoleAlignment;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.CoralIntake;
 
-import frc.robot.commands.HumanPlayer;
 import frc.robot.commands.AutoCoral;
+import frc.robot.commands.AutoAlgae;
+import frc.robot.commands.AutoCoralIntake;
+import frc.robot.commands.AutoAlgaeOuttake;
 import frc.robot.commands.AlignmentAll;
 import frc.robot.commands.AlignmentYaw;
 import frc.robot.commands.AlignmentPitch;
-
+import frc.robot.commands.AlignmentSkew;
+import frc.robot.commands.Reset;
 
 public class RobotContainer {
 
@@ -55,15 +59,8 @@ public class RobotContainer {
     public final PoleAlignment align = new PoleAlignment (s_Vision); 
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.5).in(RadiansPerSecond); // 3/4 of a max rad/s
-
-    private CoralIntake coralScore;
-    private Elevator elevator;
-    private Climb climb;
-    
-    
-
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0) // turning has no deadband and driver is lower
+            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.20) // turning has no deadband and driver is lower
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -72,14 +69,17 @@ public class RobotContainer {
     private final XboxController operator = new XboxController(1);
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     //private final SendableChooser<Command> autoChooser;
-    private final HumanPlayer humanPlayer;
-    private final AlgaeIntake algaeIntake;
-    private final AlgaeScore algaeScore;
+    private CoralIntake coralScore;
+    private Elevator elevator;
+    private Climb climb;
+    //private final HumanPlayer humanPlayer;
+    private final AutoAlgae autoAlgae;
     private final AutoCoral autoCoral;
-   // private final AlignmentAll alignmentAll;
-    // private final AlignmentPitch alignmentPitch;
-    // // private final AlignmentYaw alignmentYaw;
-    // private final AlignmentAll alignmentAll;
+    private final AutoCoralIntake autoCoralIntake;
+    private final AutoAlgaeOuttake autoAlgaeOuttake;
+    private final ScoreAlgae scoreAlgae;
+    private final ScoreCoral scoreCoral;
+    private final Reset reset;
  
 
     public RobotContainer() {
@@ -88,26 +88,26 @@ public class RobotContainer {
         elevator = new Elevator(54,51);
         climb = new Climb(53);
 
-    //    alignmentAll = new AlignmentAll(drivetrain, s_Vision, MaxAngularRate);
-    //    NamedCommands.registerCommand("alignment_all", alignmentAll);
+        scoreAlgae = new ScoreAlgae(elevator, coralScore, s_Vision, drivetrain);
+        NamedCommands.registerCommand("scoreAlgae", scoreAlgae);
 
-    //    alignmentPitch = new AlignmentPitch(drivetrain, s_Vision);
-    //    NamedCommands.registerCommand("alignment_pitch", alignmentPitch);
+        scoreCoral = new ScoreCoral(elevator, coralScore, s_Vision, drivetrain, Values.getLeftOrRight());
+        NamedCommands.registerCommand("scoreCoral", scoreCoral);
 
-        // alignmentYaw = new AlignmentYaw(drivetrain, s_Vision, Values.getLeftOrRight());
-        // NamedCommands.registerCommand("alignment", alignmentYaw);
-
-        humanPlayer = new HumanPlayer(elevator, coralScore, s_Vision, drivetrain);
-        NamedCommands.registerCommand("humanPlayer", humanPlayer);
-
-        algaeIntake = new AlgaeIntake(elevator, coralScore, s_Vision, drivetrain);
-        NamedCommands.registerCommand("algaeIntake", algaeIntake);
-
-        algaeScore = new AlgaeScore(elevator, coralScore, s_Vision, drivetrain);
-        NamedCommands.registerCommand("algaeScore", algaeScore);
+        autoAlgae = new AutoAlgae(elevator, coralScore, s_Vision, drivetrain);
+        NamedCommands.registerCommand("autoAlgae", autoAlgae);
 
         autoCoral = new AutoCoral(elevator, coralScore, s_Vision, drivetrain, 0);
         NamedCommands.registerCommand("autoCoral", autoCoral);
+
+        autoCoralIntake = new AutoCoralIntake(elevator, coralScore, s_Vision, drivetrain, 0);
+        NamedCommands.registerCommand("autoIntake", autoCoralIntake);
+
+        autoAlgaeOuttake = new AutoAlgaeOuttake(elevator, coralScore, s_Vision, drivetrain, 0);
+        NamedCommands.registerCommand("autoAlgaeOuttake", autoAlgaeOuttake);
+
+        reset = new Reset(elevator, coralScore, s_Vision, drivetrain);
+        NamedCommands.registerCommand("reset", reset);
 
         //autoChooser = AutoBuilder.buildAutoChooser("SimpleAuto");
         //SmartDashboard.putData("Auto Mode", autoChooser);
@@ -119,12 +119,20 @@ public class RobotContainer {
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() -> drive.withVelocityX((-joystick.getLeftY() * Math.abs(((-joystick.getRawAxis(3))+1) /2)) * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY((joystick.getLeftX()  * Math.abs(((-joystick.getRawAxis(3))+1) /2)) * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate((joystick.getRawAxis(2) * Math.abs(((-joystick.getRawAxis(3))+1) /2))* MaxAngularRate) // Drive counterclockwise with negative X (left)
 
-            )
+            //compitition mode
+            // drivetrain.applyRequest(() -> drive.withVelocityX((-joystick.getLeftY() * Math.abs(((-joystick.getRawAxis(3))+1) /2)) * MaxSpeed) // Drive forward with negative Y (forward)
+            //         .withVelocityY((-joystick.getLeftX()  * Math.abs(((-joystick.getRawAxis(3))+1) /2)) * MaxSpeed) // Drive left with negative X (left)
+            //         .withRotationalRate((-joystick.getRawAxis(2) * Math.abs(((-joystick.getRawAxis(3))+1) /2))* MaxAngularRate) // Drive counterclockwise with negative X (left)
+            
+            //testing mode
+            drivetrain.applyRequest(() -> drive.withVelocityX((joystick.getLeftY() * Math.abs(((-joystick.getRawAxis(3))+1) /2)) * MaxSpeed) // Drive forward with negative Y (forward)
+            .withVelocityY((joystick.getLeftX()  * Math.abs(((-joystick.getRawAxis(3))+1) /2)) * MaxSpeed) // Drive left with negative X (left)
+            .withRotationalRate((-joystick.getRawAxis(2) * Math.abs(((-joystick.getRawAxis(3))+1) /2))* MaxAngularRate) // Drive counterclockwise with negative X (left)
+             )
         );
+
+        drivetrain.configNeutralMode(NeutralModeValue.Coast);
 
         //joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
         //joystick.b().whileTrue(drivetrain.applyRequest(() ->
@@ -162,19 +170,10 @@ public class RobotContainer {
     JoystickButton driver11Button = new JoystickButton(joystick.getHID(), 11); //put score on the real later 
     JoystickButton driver10Button = new JoystickButton(joystick.getHID(), 10); //put score on the real later 
     JoystickButton driver9Button = new JoystickButton(joystick.getHID(), 9); 
-    JoystickButton driver8Button = new JoystickButton(joystick.getHID(), 8); //put score on the real later 
+    JoystickButton driver8Button = new JoystickButton(joystick.getHID(), 8); //put score on the real later ;]
     JoystickButton driver7Button = new JoystickButton(joystick.getHID(), 7); 
-
-    //not used buttons
-    // operatorL1.whileTrue(new InstantCommand(()-> coralScore.wristspeed(-1.0))); //changed to while since there isn't a speed 0 function
-    // operatorL2.whileTrue(new InstantCommand(()-> coralScore.wristspeed(1.0)));
-    operatorR1.whileTrue(new InstantCommand(()-> elevator.setElevatorspeed(-1.0)));
-    operatorR2.whileTrue(new InstantCommand(()-> elevator.setElevatorspeed(1.0)));
-  //  operatorA.onTrue(new InstantCommand(() -> coralScore.getWrist()));
-    //CLIMBBBBBBBB
-
-    //ALIGNMENT PITCH TEST
-    // operatorB.whileTrue(alignmentAll);
+    JoystickButton driver4Button = new JoystickButton(joystick.getHID(), 4); 
+    JoystickButton driver3Button = new JoystickButton(joystick.getHID(), 3); 
    
 
 
@@ -184,8 +183,8 @@ public class RobotContainer {
     driver11Button.whileTrue(new InstantCommand(()-> coralScore.wristspeed(-.3))); 
     driver11Button.whileFalse(new InstantCommand(()-> coralScore.wristspeed(-.01))); 
 
-    driver9Button.onTrue(new InstantCommand(()-> coralScore.wristpose(90)));
-    driver10Button.onTrue(new InstantCommand(()-> coralScore.wristpose(50))); 
+    driver9Button.onTrue(new InstantCommand(()-> coralScore.wristpose(CoralIntake.PLAYER_STATION)));
+    driver10Button.onTrue(new InstantCommand(()-> coralScore.wristpose(CoralIntake.CORAL_SCORE))); 
 
     driver7Button.whileTrue(new InstantCommand(()-> coralScore.CoralIntakeSpeed(1))); 
     driver7Button.whileFalse(new InstantCommand(()-> coralScore.CoralIntakeSpeed(-0.1)));
@@ -193,52 +192,57 @@ public class RobotContainer {
     driver8Button.whileTrue(new InstantCommand(()-> coralScore.CoralIntakeSpeed(-1))); 
     driver8Button.whileFalse(new InstantCommand(()-> coralScore.CoralIntakeSpeed(-.1)));
 
-    // driver12Button.onFalse(new InstantCommand(()-> climb.climbSpeed(0))); 
-    // driver11Button.onFalse(new InstantCommand(()-> climb.climbSpeed(0)));
+    driver4Button.whileTrue(new InstantCommand(() -> climb.climbSpeed(0)));
+    driver4Button.whileFalse(new InstantCommand(() -> climb.climbSpeed(0)));
+    driver3Button.whileTrue(new InstantCommand(() -> climb.climbSpeed(.7)));
+    driver3Button.whileFalse(new InstantCommand(() -> climb.climbSpeed(.3)));
+
+    thumbutton.onTrue(scoreAlgae); 
+    drivertrigger.onTrue(scoreCoral);
+
+    operatorL1.whileTrue(new InstantCommand(()-> coralScore.AlgaeIntakeSpeed(-2.5))); 
+    operatorL1.whileFalse(new InstantCommand(()-> coralScore.AlgaeIntakeSpeed(.08))); 
+
+    operatorR1.whileTrue(new InstantCommand(()-> coralScore.AlgaeIntakeSpeed(2.5)));
+    operatorR1.whileFalse(new InstantCommand(()-> coralScore.AlgaeIntakeSpeed(.08)));
+
+    operatorX.onTrue(new InstantCommand(()-> elevator.setPose(0)));
+    operatorX.onTrue(new InstantCommand(()-> coralScore.wristpose(0)));
+    
+    operatorY.onTrue(new InstantCommand(()-> Values.algaeIncreaseLevel()));
+    operatorA.onTrue(new InstantCommand(()-> Values.algaeDecreaseLevel()));
+    
+    operatorB.onTrue(new InstantCommand(()->autoAlgae.cancel()));
+    operatorB.onTrue(new InstantCommand(()->autoCoral.cancel()));
+    operatorB.onTrue(new InstantCommand(()->scoreAlgae.cancel()));
+    operatorB.onTrue(new InstantCommand(()->scoreCoral.cancel()));
+
+
     
 
-    // thumbutton.onTrue(new InstantCommand(()-> elevator.setPose(-4)));
-    // thumbutton.whileTrue(new InstantCommand(()->coralScore.AlgaeIntakeSpeed(1))); //set this up for you Nicole :)
-    // thumbutton.whileFalse(new InstantCommand(()->coralScore.AlgaeIntakeSpeed(0)));
-    //thumbutton.onTrue(algaeIntake);
-
-    drivertrigger.onTrue(new ScoreCoral(elevator, coralScore, s_Vision, drivetrain, Values.getLeftOrRight()));
-    //drivertrigger.onTrue(new ScoreCoral(elevator, coralScore, s_Vision, drivetrain, 0));
-    // operatorA.onTrue(alignmentPitch);
-
-
-    operatorX.onTrue(new InstantCommand(()-> elevator.startPose())); 
-    operatorX.onTrue(new InstantCommand(()-> coralScore.wristpose(0))); 
-    // operatorX.whileTrue(new InstantCommand(()->coralScore.AlgaeIntakeSpeed(1))); 
-    // operatorX.whileFalse(new InstantCommand(()->coralScore.AlgaeIntakeSpeed(.1))); 
-
-    // operatorY.whileTrue(new InstantCommand(()->coralScore.AlgaeIntakeSpeed(-1)));
-    // operatorY.whileFalse(new InstantCommand(()->coralScore.AlgaeIntakeSpeed(.1)));
-
-    // operatorA.whileTrue(new InstantCommand(()->coralScore.AlgaeIntakeSpeed(1)));
-    // operatorA.whileFalse(new InstantCommand(()->coralScore.AlgaeIntakeSpeed(.1)));
-
-    // operatorB.whileTrue(algaeScore);
-
-    dPadUp.onTrue(new InstantCommand(()-> Values.increaseLevel())); //changed while true to ontrue
+    dPadUp.onTrue(new InstantCommand(()-> Values.coralIncreaseLevel())); //changed while true to ontrue
     dPadRight.onTrue(new InstantCommand(()-> Values.setLeftOrRight(false)));
-    dPadDown.onTrue(new InstantCommand(()-> Values.decreaseLevel()));
+    dPadDown.onTrue(new InstantCommand(()-> Values.coralDecreaseLevel()));
     dPadLeft.onTrue(new InstantCommand(()-> Values.setLeftOrRight(true)));
     
+
     }
 
     public void postToSmartDashboard(){
         SmartDashboard.putNumber("Rotation P", 100);
         SmartDashboard.putNumber("Rotation D", 0.5);
-        SmartDashboard.putNumber("level", Values.getLevel());
         SmartDashboard.putNumber("yaw", s_Vision.getYaw());
         SmartDashboard.putString("direction", Values.getLorR());
         SmartDashboard.putNumber("direct", Values.getLeftOrRight());
+        SmartDashboard.putNumber("laserCAN_Distance", s_Vision.getMeasurement());
+        SmartDashboard.putNumber("laserCAN_Distance... THE SEQUAL", s_Vision.getMeasurement2());
+        SmartDashboard.putNumber("SKEW ANGLE", s_Vision.skewAngle());
+        SmartDashboard.putNumber("z angle", s_Vision.getSkew());
     }
 
 
     public Command getAutonomousCommand() {
-        return (new PathPlannerAuto("maybe score"));
+        return (new PathPlannerAuto("middle"));
        //return new SequentialCommandGroup( new PathPlannerAuto("SimpleAuto") , motor2.withTimeout(.5 ));
     }
-}
+} 

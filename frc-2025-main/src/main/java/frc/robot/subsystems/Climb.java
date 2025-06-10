@@ -49,9 +49,9 @@ public class Climb extends SubsystemBase{
         clamp.set(speed);
     }
 
-    // public void endClimb(){
-    //     clamp.setControl(m_request.withPosition(climbPosition));
-    // }
+    public void setClimb(int climbPosition){
+        clamp.setControl(m_request.withPosition(climbPosition));
+    }
 
 }
 

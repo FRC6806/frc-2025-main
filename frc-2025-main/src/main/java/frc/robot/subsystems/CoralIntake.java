@@ -25,15 +25,15 @@ public class CoralIntake extends SubsystemBase {
     private TalonFX wrist;
     private TalonFX algae;
     public static final double ALGAE_SHOOT = 94;
-    public static final double PLAYER_STATION = 93;
+    public static final double PLAYER_STATION = 88;
     public static final double MOVE_ELEVATOR = 30;
-    public static final double CORAL_SCORE = 47;
+    public static final double CORAL_SCORE = 58;
     public static final double REEF_ANGLE = 77;
     public static final double BACK_IN_ROBOT = 6;
     public static final double startPosition = 0;
     public static final double deadband = 0.1;
     
-   // private LaserCan lasercan = new LaserCan(62);
+   
 
     private final CANBus canbus;
     final PositionVoltage m_request = new PositionVoltage(0).withSlot(0);
@@ -69,28 +69,12 @@ public class CoralIntake extends SubsystemBase {
         // Apply configurations to the motor
        wrist.getConfigurator().apply(talonFXConfigs);
        
-    //    try{
-         
-    //     lasercan.setRangingMode(LaserCan.RangingMode.SHORT);
-    //     lasercan.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
-    //     lasercan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
-        
-    //    } catch(ConfigurationFailedException e) {
-    //     System.out.println("Configuration Failed!" + e);
-    //    }
+       
            
     }
 
     
-    // public double getMeasurement(){
-    //     LaserCan.Measurement measurement = lasercan.getMeasurement();
-    //     if(measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT){
-    //      return measurement.distance_mm;
-    //     }
-    //     else{
-    //         return -1;
-    //     }
-    // }
+    
         
 
     public void CoralIntakeSpeed(double speed){

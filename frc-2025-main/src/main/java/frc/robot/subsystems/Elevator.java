@@ -80,7 +80,7 @@ public class Elevator extends SubsystemBase {
     }
     public void startPose() {
         // set target position to 10 rotations
-        rightMotor.setControl(m_request.withPosition(-1));
+        rightMotor.setControl(m_request.withPosition(-.5));
         try {
             TimeUnit.MILLISECONDS.sleep(800);
             m_request.Velocity = .5;
@@ -93,45 +93,12 @@ public class Elevator extends SubsystemBase {
         m_request.Velocity = 0.6;
         m_request.FeedForward = 0.8;
         try {
-            TimeUnit.MILLISECONDS.sleep(800);
+            TimeUnit.MILLISECONDS.sleep(20);
         } catch (InterruptedException e) {
             System.out.print("Error");
         }
         rightMotor.set(0);
     }
-    public void lowPose() {
-                // set target position to 10 rotations
-        
-                rightMotor.setControl(m_request.withPosition(-4));
-                try {
-                    TimeUnit.MILLISECONDS.sleep(800);
-                    m_request.Velocity = 1;
-                    m_request.FeedForward = 1;
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    System.out.print("Error");
-                }
-                rightMotor.setControl(m_request.withPosition(-3));
-                m_request.Velocity = 0.6;
-                m_request.FeedForward = 0.8;
-    }    
-    public void midPos1() {
-        // set target position to 10 rotations
-
-        rightMotor.setControl(m_request.withPosition(-9));
-        try {
-            TimeUnit.MILLISECONDS.sleep(800);
-            m_request.Velocity = 1;
-            m_request.FeedForward = 1;
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            System.out.print("Error");
-        }
-        rightMotor.setControl(m_request.withPosition(-8));
-        m_request.Velocity = 0.6;
-        m_request.FeedForward = 0.8;
-    }   
-
     public void setElevatorspeed(double speed){
             leftMotor.set(speed);
             SmartDashboard.putNumber("elevator pos",leftMotor.getPosition().getValueAsDouble());

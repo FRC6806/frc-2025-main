@@ -6,23 +6,27 @@ package frc.robot;
 
 import com.ctre.phoenix6.Utils;
 
+import au.grapplerobotics.CanBridge;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-//import au.grapplerobotics.CanBridge;
+import au.grapplerobotics.CanBridge;
 import frc.robot.subsystems.Values;
+import frc.robot.subsystems.VisionSystem;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-
   private final RobotContainer m_robotContainer;
 
   private final boolean kUseLimelight = false;
 
   public Robot() {
-   // CanBridge.runTCP();
+    CanBridge.runTCP();
     m_robotContainer = new RobotContainer();
+
+    CameraServer.startAutomaticCapture();
   }
 
   @Override
@@ -37,8 +41,13 @@ public class Robot extends TimedRobot {
      * This example is sufficient to show that vision integration is possible, though exact implementation
      * of how to use vision should be tuned per-robot and to the team's specification.
      */
+    SmartDashboard.putNumber("Algae level", Values.getAlgaeLevel());
+    SmartDashboard.putNumber("Coral level", Values.getCoralLevel());
     SmartDashboard.putNumber("Rotation P", 100);
     SmartDashboard.putNumber("Rotation D", 0.5);
+
+    m_robotContainer.postToSmartDashboard();
+
     if (kUseLimelight) {
       var llMeasurement = Vision.getBotPoseEstimate_wpiBlue("limelight");
       if (llMeasurement != null) {

@@ -6,6 +6,9 @@ package frc.robot.commands;
 import frc.robot.Constants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.VisionSystem;
+
+import java.lang.annotation.Target;
+
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -24,17 +27,18 @@ public class AlignmentPitch extends Command {
     private double rotChange;
     private final SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric();
 
-    private double TargetPitch = 20;  
+    private double TargetPitch;  
     // private boolean end;
 
 
 
 
-    public AlignmentPitch(CommandSwerveDrivetrain s_Swerve,VisionSystem s_Vision) {
+    public AlignmentPitch(CommandSwerveDrivetrain s_Swerve,VisionSystem s_Vision,double TargetPitch) {
         this.s_Vision = s_Vision;
         this.s_Swerve = s_Swerve;
         addRequirements(s_Vision);
         addRequirements(s_Swerve);
+        this.TargetPitch = TargetPitch;
     }
 
 
@@ -56,28 +60,23 @@ public void end(boolean interupted){
  );
 
 
+
 }
 
 
 
 
-public boolean isFinished(){
+public boolean isFinished(){ 
 
 
-    if(! s_Vision.HasTarget()){
-        return true;
-    } 
 
-    if ( Math.abs(s_Vision.getPitch() - TargetPitch) <= .5)
+
+    if ( Math.abs(s_Vision.getMeasurement() - TargetPitch) <=20)
     {
       return true;
     }else {
       return false;
     }
-
-
-    
-
    
 }
 
@@ -94,20 +93,23 @@ public void setEnd(){
     @Override
     public void execute() {
        
+            pitchChange = s_Vision.getMeasurement() - (TargetPitch);
+            pitchChange /= 275.0;
+            if(s_Vision.getMeasurement()== -1){
+                pitchChange = 0.2;
+            }
+            if (pitchChange>TargetPitch && pitchChange < 0.2){
+                pitchChange = 0.2;
+            }
+            if (pitchChange<TargetPitch && pitchChange < -0.2){
+                pitchChange = -0.2;
+            }
 
 
-    
-
-        if(s_Vision.HasTarget() ){
-            pitchChange = s_Vision.getPitch() - TargetPitch;
-            pitchChange /= -7.0;
-        }
-
-
-        SmartDashboard.putNumber("pitchChange", pitchChange);
+            SmartDashboard.putNumber("pitchChange", pitchChange);
             SmartDashboard.putNumber("yawChange", yawChange);
             SmartDashboard.putNumber("rotChange", rotChange);
-            SmartDashboard.putNumber("THE pitch", s_Vision.getPitch());
+            // SmartDashboard.putNumber("distance", s_Vision.getMeasurement());
 
 
 

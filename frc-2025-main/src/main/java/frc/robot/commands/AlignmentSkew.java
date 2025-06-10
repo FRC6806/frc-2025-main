@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Values;
 
-public class AlignmentYaw extends Command {    
+public class AlignmentSkew extends Command {    
     private CommandSwerveDrivetrain s_Swerve;    
     private VisionSystem s_Vision;
     private boolean run;
@@ -23,15 +23,15 @@ public class AlignmentYaw extends Command {
     private double yawChange;
     private double rotChange;
     private final SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric();
-    private double TargetYaw; // this is set later
+    private double TargetRotation; // this is set later
 
 
-    public AlignmentYaw(CommandSwerveDrivetrain s_Swerve,VisionSystem s_Vision, double TargetYaw) {
+    public AlignmentSkew(CommandSwerveDrivetrain s_Swerve,VisionSystem s_Vision, double TargetRotation) {
         this.s_Vision = s_Vision;
         this.s_Swerve = s_Swerve;
         addRequirements(s_Vision);
         addRequirements(s_Swerve);
-        this.TargetYaw = Values.getLeftOrRight(); //30 for left -30 for right 0 for center
+        this.TargetRotation = 0; //30 for left -30 for right 0 for center
     }
 
 
@@ -66,51 +66,42 @@ public boolean isFinished(){
     // } 
 
 
-    if ( Math.abs(s_Vision.getYaw() - TargetYaw) <= 3)
+    if ( Math.abs(s_Vision.getSkew()-Math.PI) <= .1)
     {
       return true;
     }else {
         return false;
    }
    
-
-   
 }
 
 
 
 
-
+public double skewAngle(){
+    int width = 8; //distance between LASERCANS!!!!
+    return Math.asin((s_Vision.getMeasurement()-s_Vision.getMeasurement2())/width);
+}
 
     @Override
     public void execute() {
+        SmartDashboard.putNumber("ANGLE", skewAngle());
+        // double rotSpeed = .2;
+        // if(s_Vision.HasTarget() ){
+        //    if(s_Vision.getSkew() < Math.PI){
+        //         rotSpeed = -.2;
+        //    }
+        // }
 
-        if(s_Vision.HasTarget() ){
-            TargetYaw = Values.getLeftOrRight();
-            yawChange = s_Vision.getYaw() -TargetYaw;
-            yawChange /= -30;
-            // if (yawChange <= 0.2 && yawChange > 0){
-            //     yawChange = 0.2;
-            // }
-            // else if (yawChange >= -0.2 && yawChange < 0){
-            //     yawChange = -0.2;
-            // }
-        }
-
-            SmartDashboard.putNumber("pitchChange", pitchChange);
-            SmartDashboard.putNumber("yawChange", yawChange);
-            SmartDashboard.putNumber("rotChange", rotChange);
-            SmartDashboard.putNumber("targetYawButActually", TargetYaw);
-
-            if(isFinished() == false){
-            s_Swerve.setControl(
+        //     if(isFinished() == false){
+        //     s_Swerve.setControl(
               
-             drive.withVelocityX(0) //pitchchange for front and back 0 for not that BACK W/ NOTE FROM B4, MAKE SUPER SLOW 
-                .withVelocityY(yawChange) 
-                .withRotationalRate(0)
-            ); }
+        //      drive.withVelocityX(0) //pitchchange for front and back 0 for not that BACK W/ NOTE FROM B4, MAKE SUPER SLOW 
+        //         .withVelocityY(0) 
+        //         .withRotationalRate(rotSpeed)
+        //     ); }
  
-        }
+         }
 
 
 

@@ -4,7 +4,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class Moving {
+public class MoveRobotCentric {
 
     private final SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric();
 
