@@ -78,26 +78,30 @@ public boolean isFinished(){
 
 
 
-
+public double skewAngle(){
+    int width = 8; //distance between LASERCANS!!!!
+    return Math.asin((s_Vision.getMeasurement()-s_Vision.getMeasurement2())/width);
+}
 
     @Override
     public void execute() {
-        double rotSpeed = .2;
-        if(s_Vision.HasTarget() ){
-           if(s_Vision.getSkew() < Math.PI){
-                rotSpeed = -.2;
-           }
-        }
+        SmartDashboard.putNumber("ANGLE", skewAngle());
+        // double rotSpeed = .2;
+        // if(s_Vision.HasTarget() ){
+        //    if(s_Vision.getSkew() < Math.PI){
+        //         rotSpeed = -.2;
+        //    }
+        // }
 
-            if(isFinished() == false){
-            s_Swerve.setControl(
+        //     if(isFinished() == false){
+        //     s_Swerve.setControl(
               
-             drive.withVelocityX(0) //pitchchange for front and back 0 for not that BACK W/ NOTE FROM B4, MAKE SUPER SLOW 
-                .withVelocityY(0) 
-                .withRotationalRate(rotSpeed)
-            ); }
+        //      drive.withVelocityX(0) //pitchchange for front and back 0 for not that BACK W/ NOTE FROM B4, MAKE SUPER SLOW 
+        //         .withVelocityY(0) 
+        //         .withRotationalRate(rotSpeed)
+        //     ); }
  
-        }
+         }
 
 
 

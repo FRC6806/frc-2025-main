@@ -35,7 +35,7 @@ public class AutoAlgae extends SequentialCommandGroup {
         // Initialize alignment commands
         alignmentPitch = new AlignmentPitch(swerve, vision, 1000);
         alignmentYaw = new AlignmentYaw(swerve, vision, 0);
-        alignmentPitch2 = new AlignmentPitch(swerve, vision, 650);
+        alignmentPitch2 = new AlignmentPitch(swerve, vision, 300);
         // Register alignment commands
         NamedCommands.registerCommand("alignmentPitch", alignmentPitch);
         NamedCommands.registerCommand("alignmentYaw", alignmentYaw);
@@ -44,15 +44,14 @@ public class AutoAlgae extends SequentialCommandGroup {
         
         addCommands(
             alignmentPitch, 
-            new WaitCommand(.5),
-            //new InstantCommand(() -> s_CoralIntake.wristpose(28)), 
-            new WaitCommand(.5),
-            new InstantCommand(() -> Values.setLeftOrRight()),
+            new InstantCommand(() -> s_CoralIntake.wristpose(28)), 
+            new WaitCommand(.2),
+            //new InstantCommand(() -> Values.setLeftOrRight()),
             alignmentYaw,
             alignmentPitch2,
-            new InstantCommand(() -> s_Elevator.setPose(-15)),
-            // new InstantCommand(() -> coralIntake.AlgaeIntakeSpeed(1.0)), 
-            new WaitCommand(2), 
+            new InstantCommand(() -> s_Elevator.setPose(-7)),
+            new InstantCommand(() -> coralIntake.AlgaeIntakeSpeed(3.0)), 
+            new WaitCommand(1), 
             new InstantCommand(() -> coralIntake.CoralIntakeSpeed(0))
         );
     }

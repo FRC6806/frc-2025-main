@@ -32,8 +32,7 @@ public class Reset extends SequentialCommandGroup {
 
         addCommands(
             new InstantCommand(() -> s_Elevator.setPose(0)),
-            //new InstantCommand(() -> s_CoralIntake.wristpose(0)), 
-            new InstantCommand(() -> s_CoralIntake.AlgaeIntakeSpeed(0))
+            new InstantCommand(() -> s_CoralIntake.wristpose(0))
         );
     }
 

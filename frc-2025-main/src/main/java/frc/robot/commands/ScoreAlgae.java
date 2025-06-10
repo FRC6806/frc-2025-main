@@ -32,11 +32,16 @@ public class ScoreAlgae extends SequentialCommandGroup {
         this.s_Elevator = elevator;
         this.s_CoralIntake =coralIntake;
         this.s_Vision =vision;
-        this.s_swerve =swerve;
+        // addRequirements(s_Vision);
+        // addRequirements(s_CoralIntake);
+        // addRequirements(s_Elevator);
 
-        alignmentPitch = new AlignmentPitch(swerve, vision, 1000);
-        alignmentYaw = new AlignmentYaw(swerve, vision, 0);
-        alignmentPitch2 = new AlignmentPitch(swerve, vision, 650);
+
+        // this.s_swerve =swerve;
+
+        // alignmentPitch = new AlignmentPitch(swerve, vision, 1000);
+        // alignmentYaw = new AlignmentYaw(swerve, vision, 0);
+        // alignmentPitch2 = new AlignmentPitch(swerve, vision, 650);
         // NamedCommands.registerCommand("alignmentPitch", alignmentPitch);
         // NamedCommands.registerCommand("alignmentYaw", alignmentYaw);
         //NamedCommands.registerCommand("alignmentPitch2", alignmentPitch2); 
@@ -54,16 +59,16 @@ public class ScoreAlgae extends SequentialCommandGroup {
             }
    
         addCommands(
-            alignmentPitch, 
+            // alignmentPitch, 
+            new InstantCommand(() -> s_CoralIntake.wristpose(30)), 
             new WaitCommand(.5),
-            //new InstantCommand(() -> s_CoralIntake.wristpose(28)), 
-            new WaitCommand(.5),
-            alignmentYaw, 
-            alignmentPitch2,
-            nextCommand,
-            new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(-1.0)),
-            new WaitCommand(3),
-            new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(0))
+            new InstantCommand(() -> s_Elevator.setPose(Values.algaeSetLevel()))
+            // alignmentYaw, 
+            // alignmentPitch2,
+            //nextCommand
+            //new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(-1.0)),
+            //new WaitCommand(3)
+            //new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(0))
         );
     }
 

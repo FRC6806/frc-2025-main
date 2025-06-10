@@ -19,6 +19,7 @@ public class AutoCoral extends SequentialCommandGroup {
     private double position;
     private AlignmentPitch alignmentPitch;
     private AlignmentPitch alignmentPitch2;
+    private AlignmentPitch alignmentPitch3;
     private AlignmentYaw alignmentYaw;
     
     public AutoCoral(Elevator elevator, CoralIntake coralIntake, VisionSystem vision, CommandSwerveDrivetrain swerve, double position) {
@@ -30,7 +31,8 @@ public class AutoCoral extends SequentialCommandGroup {
 
         // Initialize alignment commands
         alignmentPitch = new AlignmentPitch(swerve, vision, 1000);
-        alignmentPitch2 = new AlignmentPitch(swerve,vision,650);
+        alignmentPitch2 = new AlignmentPitch(swerve,vision,600);
+        alignmentPitch3 = new AlignmentPitch(swerve,vision,500);
         alignmentYaw = new AlignmentYaw(swerve, vision, 30);
         
         // Register alignment commands
@@ -40,14 +42,15 @@ public class AutoCoral extends SequentialCommandGroup {
 
         
         addCommands(
-            alignmentPitch, 
-            new WaitCommand(0.5), 
-            //new InstantCommand(() -> coralIntake.wristpose(CoralIntake.CORAL_SCORE)), 
-            new WaitCommand(0.5),
+            alignmentPitch,  
+            new InstantCommand(() -> coralIntake.wristpose(CoralIntake.CORAL_SCORE)), 
+            new WaitCommand(.2),
             new InstantCommand(() -> Values.setLeftOrRight(true)), 
             alignmentYaw, 
             alignmentPitch2,
             new InstantCommand(() -> s_Elevator.setPose(-18)),
+            alignmentPitch3,
+            new WaitCommand(2), 
             new InstantCommand(() -> coralIntake.CoralIntakeSpeed(1.0)), 
             new WaitCommand(3), 
             new InstantCommand(() -> coralIntake.CoralIntakeSpeed(0))

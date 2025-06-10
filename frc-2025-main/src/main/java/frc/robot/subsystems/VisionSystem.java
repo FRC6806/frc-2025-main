@@ -28,7 +28,8 @@ public class VisionSystem extends SubsystemBase {
   //private final Pose2dSupplier getSimPose;
   //private final PhotonPipelineResult result= camera.getLatestResult();
   //@FunctionalInterface
-  private LaserCan lasercan = new LaserCan(62);
+  private LaserCan lasercan = new LaserCan(0);
+  private LaserCan lasercan2 = new LaserCan(2);
   public interface Pose2dSupplier {
     Pose2d getPose2d();
   }
@@ -40,6 +41,16 @@ public class VisionSystem extends SubsystemBase {
         lasercan.setRangingMode(LaserCan.RangingMode.SHORT);
         lasercan.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
         lasercan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
+        
+       } catch(ConfigurationFailedException e) {
+        System.out.println("Configuration Failed!" + e);
+       }
+
+       try{
+         
+        lasercan2.setRangingMode(LaserCan.RangingMode.SHORT);
+        lasercan2.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
+        lasercan2.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
         
        } catch(ConfigurationFailedException e) {
         System.out.println("Configuration Failed!" + e);
@@ -63,16 +74,29 @@ public class VisionSystem extends SubsystemBase {
     }
   }
 
-  public double getMeasurement(){
-    LaserCan.Measurement measurement = lasercan.getMeasurement();
-    if(measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT){
-     return measurement.distance_mm;
-    }
-    else{
-        return -1;
-    }
+public double getMeasurement(){
+  LaserCan.Measurement measurement = lasercan.getMeasurement();
+  if(measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT){
+    return measurement.distance_mm;
+  }
+ else{
+      return -1;
+  }
 }
 
+public double getMeasurement2(){
+  LaserCan.Measurement measurement = lasercan2.getMeasurement();
+  if(measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT){
+   return measurement.distance_mm;
+  }
+  else{
+      return -1;
+  }
+}
+public double skewAngle(){
+  double width = 203.2; //distance between LASERCANS!!!!
+  return Math.asin((getMeasurement()-getMeasurement2())/width);
+}
   public boolean HasTarget(){
     var result = camera.getLatestResult();
     return result.hasTargets(); 

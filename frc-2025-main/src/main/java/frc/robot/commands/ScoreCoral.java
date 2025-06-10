@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralIntake;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Moving;
 import frc.robot.subsystems.VisionSystem;
 import frc.robot.subsystems.Values;
 import frc.robot.commands.AlignmentAll;
@@ -26,8 +25,8 @@ public class ScoreCoral extends SequentialCommandGroup {
     private CommandSwerveDrivetrain s_swerve;
     private double position;
     private AlignmentPitch alignmentPitch;
+    private AlignmentSkew alignmentSkew;
     private AlignmentYaw alignmentYaw;
-    private Moving move;
     private AlignmentAll alignmentAll;
     private AlignmentPitch alignmentPitch2;
 
@@ -36,13 +35,19 @@ public class ScoreCoral extends SequentialCommandGroup {
         this.s_CoralIntake =coralIntake;
         this.s_Vision =vision;
         this.s_swerve =swerve;
+        // addRequirements(s_Vision);
+        // addRequirements(s_CoralIntake);
+        // addRequirements(s_Elevator);
+        // addRequirements(s_swerve);
         alignmentPitch = new AlignmentPitch(swerve, vision, 1000);
+        alignmentSkew = new AlignmentSkew(swerve, vision, 0);
         alignmentPitch2 = new AlignmentPitch(swerve,vision,650);
         alignmentYaw = new AlignmentYaw(swerve, vision, TargetYaw);
         alignmentAll = new AlignmentAll(swerve, vision, TargetYaw, 1000);
         NamedCommands.registerCommand("alignmentAll", alignmentAll);
         NamedCommands.registerCommand("alignmentPitch", alignmentPitch);
         NamedCommands.registerCommand("alignmentYaw", alignmentYaw);
+        NamedCommands.registerCommand("alignmentSkew", alignmentSkew);
         NamedCommands.registerCommand("alignmentPitch2",alignmentPitch2);
         
 
@@ -60,18 +65,18 @@ public class ScoreCoral extends SequentialCommandGroup {
             }
 
         addCommands(
-            alignmentPitch, 
-            new WaitCommand(.1),
-            //new InstantCommand(() -> s_CoralIntake.wristpose(CoralIntake.CORAL_SCORE)), 
-            new WaitCommand(.1),
-            alignmentYaw,
-            alignmentPitch2,
-            nextCommand
+            //alignmentSkew
+            //alignmentPitch, 
+            // new WaitCommand(.1),
+            new InstantCommand(() -> s_CoralIntake.wristpose(CoralIntake.CORAL_SCORE)), 
+            new WaitCommand(.5),
+            new InstantCommand(() -> s_Elevator.setPose(Values.coralSetLevel())) //testing line
+            // alignmentYaw,
+            // alignmentPitch2,
+            //nextCommand
             // new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(1.0)),
             // new WaitCommand(3),
             // new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(0))
-
-            //uncomment the stuff stuff behind this for alignment to work well
 
         );
     }

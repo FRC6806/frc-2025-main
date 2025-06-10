@@ -26,9 +26,9 @@ public class AutoAlgaeOuttake extends SequentialCommandGroup {
         this.position = position; 
    
         addCommands(
-            // new InstantCommand(() -> s_CoralIntake.AlgaeIntakeSpeed(-1)),
-            new WaitCommand(1)
-            // new InstantCommand(() -> s_CoralIntake.AlgaeIntakeSpeed(0))
+            new InstantCommand(() -> s_CoralIntake.AlgaeIntakeSpeed(-1)),
+            new WaitCommand(1),
+            new InstantCommand(() -> s_CoralIntake.AlgaeIntakeSpeed(0))
         );
     }
 

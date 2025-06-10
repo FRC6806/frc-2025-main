@@ -26,7 +26,7 @@ public class AutoCoralIntake extends SequentialCommandGroup {
         this.position = position; 
    
         addCommands(
-            new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(.5)),
+            new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(-.5)),
             new WaitCommand(3),
             new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(0))
         );

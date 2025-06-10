@@ -13,30 +13,6 @@
         {
           "type": "named",
           "data": {
-            "name": "autoAlgae"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "reset"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "middle2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "autoAlgaeOuttake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "autoCoral"
           }
         },

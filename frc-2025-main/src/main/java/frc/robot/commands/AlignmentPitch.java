@@ -68,6 +68,9 @@ public void end(boolean interupted){
 
 public boolean isFinished(){ 
 
+
+
+
     if ( Math.abs(s_Vision.getMeasurement() - TargetPitch) <=20)
     {
       return true;
