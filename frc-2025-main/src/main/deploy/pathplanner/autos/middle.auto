@@ -7,43 +7,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "blue mid 1"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "blue mid 2"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "pathName": "middle1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoCoral"
+            "name": "autoAlgae"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "reset"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "blue mid 3"
+            "pathName": "middle2"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0
+            "name": "autoAlgaeOuttake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autoCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "reset"
           }
         }
       ]

@@ -7,7 +7,7 @@ public class Values {
     private static boolean scoreMode = true; //t=algae
     //true is right, false is left
     private static int algaeLevel = 0;
-    private static boolean leftOrRight= true;
+    private static int leftOrRight = 1;
     
     public Values(){
         //mothing herree
@@ -40,9 +40,16 @@ public class Values {
         scoreMode = !scoreMode;
     }
     public static void setLeftOrRight(boolean b){
-        leftOrRight = b;
+        if (b){
+            leftOrRight = 1;
+        }
+        else{
+            leftOrRight = 0;
+        }
     }
-
+    public static void setLeftOrRight(){
+        leftOrRight = 2;
+    }
 
     public static double coralSetLevel(){
         if (coralLevel == 1){ //works
@@ -81,11 +88,14 @@ public class Values {
 
 
     public static double getLeftOrRight(){
-        if(leftOrRight){
-            return 30;
+        if(leftOrRight==1){
+            return 18;
+        }
+        else if (leftOrRight == 0){
+            return -18;
         }
         else{
-            return -30;
+            return 0;
         }
     }
 
@@ -100,11 +110,14 @@ public class Values {
 
 
     public static String getLorR(){ //for alignment since Dylan heard it is centered to the apriltag but needs to center to the reef
-        if(leftOrRight){
+        if(leftOrRight == 1){
             return "Left";
         }
-        else{
+        else if (leftOrRight ==0){
             return "Right";
+        }
+        else{
+            return "Center";
         }
     }
     public static String getScoreMode(){

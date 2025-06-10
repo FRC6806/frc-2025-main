@@ -1,6 +1,5 @@
 package frc.robot.commands;
 import frc.robot.Constants;
-import frc.robot.Constants;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -30,18 +29,21 @@ public class ScoreCoral extends SequentialCommandGroup {
     private AlignmentYaw alignmentYaw;
     private Moving move;
     private AlignmentAll alignmentAll;
+    private AlignmentPitch alignmentPitch2;
 
-    public ScoreCoral(Elevator elevator, CoralIntake coralIntake, VisionSystem vision, CommandSwerveDrivetrain swerve, double TargetYaw, double TargetPitch){
+    public ScoreCoral(Elevator elevator, CoralIntake coralIntake, VisionSystem vision, CommandSwerveDrivetrain swerve, double TargetYaw){
         this.s_Elevator = elevator;
         this.s_CoralIntake =coralIntake;
         this.s_Vision =vision;
         this.s_swerve =swerve;
-        alignmentPitch = new AlignmentPitch(swerve, vision, TargetPitch);
+        alignmentPitch = new AlignmentPitch(swerve, vision, 1000);
+        alignmentPitch2 = new AlignmentPitch(swerve,vision,650);
         alignmentYaw = new AlignmentYaw(swerve, vision, TargetYaw);
-        alignmentAll = new AlignmentAll(swerve, vision, TargetYaw, TargetPitch);
+        alignmentAll = new AlignmentAll(swerve, vision, TargetYaw, 1000);
         NamedCommands.registerCommand("alignmentAll", alignmentAll);
         NamedCommands.registerCommand("alignmentPitch", alignmentPitch);
         NamedCommands.registerCommand("alignmentYaw", alignmentYaw);
+        NamedCommands.registerCommand("alignmentPitch2",alignmentPitch2);
         
 
         Command nextCommand;
@@ -49,34 +51,28 @@ public class ScoreCoral extends SequentialCommandGroup {
                 nextCommand = new InstantCommand(() -> {
                         s_Elevator.setPose(Values.coralSetLevel());
                 });
+            
             }else{
 
-                nextCommand = new SequentialCommandGroup(new InstantCommand(() ->s_Elevator.setPose(Values.coralSetLevel())),
-                new InstantCommand(() ->s_CoralIntake.wristpose(78)));
+              nextCommand = new SequentialCommandGroup(new InstantCommand(() ->s_Elevator.setPose(Values.coralSetLevel())));
+               //new InstantCommand(() ->s_CoralIntake.wristpose(78)));
              
             }
 
         addCommands(
-            alignmentYaw
-            //new WaitCommand(.5),
-            //new InstantCommand(() -> s_CoralIntake.wristpose(CoralIntake.CORAL_SCORE)),
-            //new WaitCommand(.5),
-            //nextCommand
-            //alignmentYaw, alignmentPitch,
-
-
-
-
-
-            //new WaitCommand(.5),
-            //new PathPlannerAuto("alignLeft")
-
-            // new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(1.0)), // changed from pos to neg -robert
+            alignmentPitch, 
+            new WaitCommand(.1),
+            //new InstantCommand(() -> s_CoralIntake.wristpose(CoralIntake.CORAL_SCORE)), 
+            new WaitCommand(.1),
+            alignmentYaw,
+            alignmentPitch2,
+            nextCommand
+            // new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(1.0)),
             // new WaitCommand(3),
-            // new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(0)) // changed from pos to neg -robert
+            // new InstantCommand(() -> s_CoralIntake.CoralIntakeSpeed(0))
 
-            // new InstantCommand(() -> s_Elevator.startPose()),
-            // new WaitCommand(1),
+            //uncomment the stuff stuff behind this for alignment to work well
+
         );
     }
 

@@ -33,7 +33,7 @@ public class CoralIntake extends SubsystemBase {
     public static final double startPosition = 0;
     public static final double deadband = 0.1;
     
-   // private LaserCan lasercan = new LaserCan(62);
+   
 
     private final CANBus canbus;
     final PositionVoltage m_request = new PositionVoltage(0).withSlot(0);
@@ -69,28 +69,12 @@ public class CoralIntake extends SubsystemBase {
         // Apply configurations to the motor
        wrist.getConfigurator().apply(talonFXConfigs);
        
-    //    try{
-         
-    //     lasercan.setRangingMode(LaserCan.RangingMode.SHORT);
-    //     lasercan.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
-    //     lasercan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
-        
-    //    } catch(ConfigurationFailedException e) {
-    //     System.out.println("Configuration Failed!" + e);
-    //    }
+       
            
     }
 
     
-    // public double getMeasurement(){
-    //     LaserCan.Measurement measurement = lasercan.getMeasurement();
-    //     if(measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT){
-    //      return measurement.distance_mm;
-    //     }
-    //     else{
-    //         return -1;
-    //     }
-    // }
+    
         
 
     public void CoralIntakeSpeed(double speed){

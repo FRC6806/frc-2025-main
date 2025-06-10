@@ -18,6 +18,9 @@ import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import au.grapplerobotics.ConfigurationFailedException;
+import au.grapplerobotics.LaserCan;
+
 public class VisionSystem extends SubsystemBase {
   PhotonCamera camera;
   //private final PhotonCamera camera = new PhotonCamera("photonvision");
@@ -25,12 +28,22 @@ public class VisionSystem extends SubsystemBase {
   //private final Pose2dSupplier getSimPose;
   //private final PhotonPipelineResult result= camera.getLatestResult();
   //@FunctionalInterface
+  private LaserCan lasercan = new LaserCan(62);
   public interface Pose2dSupplier {
     Pose2d getPose2d();
   }
 
      public VisionSystem(String cameraName){
       camera = new PhotonCamera(cameraName);
+      try{
+         
+        lasercan.setRangingMode(LaserCan.RangingMode.SHORT);
+        lasercan.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
+        lasercan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
+        
+       } catch(ConfigurationFailedException e) {
+        System.out.println("Configuration Failed!" + e);
+       }
     }
     
     public void start(){
@@ -49,6 +62,17 @@ public class VisionSystem extends SubsystemBase {
         
     }
   }
+
+  public double getMeasurement(){
+    LaserCan.Measurement measurement = lasercan.getMeasurement();
+    if(measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT){
+     return measurement.distance_mm;
+    }
+    else{
+        return -1;
+    }
+}
+
   public boolean HasTarget(){
     var result = camera.getLatestResult();
     return result.hasTargets(); 
@@ -62,13 +86,14 @@ public class VisionSystem extends SubsystemBase {
       return target.getPitch();
     }
     else{
-      return 0;} // HIIII GUYS GOOOD LUCKKKKKKKKKKKKKKKKKKKKK - nicole :DDDDD
+      return 0;} // Bye GUYS BAD LUCKKKKKKKKKKKKKKKKKKKKK - nicole :(((((())))))
     }
     
-    public double getskew(){
+    public double getSkew(){
       var result = camera.getLatestResult();
       PhotonTrackedTarget target = result.getBestTarget();
       if(result.hasTargets() == true){
+        SmartDashboard.putNumber("z angle", target.getBestCameraToTarget().getZ());
         return target.getSkew();
       }
       else{

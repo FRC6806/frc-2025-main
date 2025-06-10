@@ -3,10 +3,8 @@
   "robotLength": 0.762,
   "holonomicMode": true,
   "pathFolders": [
-    "Blue Mid",
-    "GOOD STRAIGHT",
-    "alignRight",
-    "alignLeft",
+    "straight",
+    "middle",
     "maybe score"
   ],
   "autoFolders": [],
